@@ -1,0 +1,55 @@
+# Правила референтного ценообразования на рецептурные лекарства в Узбекистане по версиям.
+# Каждая версия действует с effective_from до начала следующей. Движок выбирает версию по дате (ADR-0003).
+# status у каждого правила: fact — подтверждено источником; estimate — наше прочтение, сверить с текстом приказа.
+version: 1
+
+markups:
+  duty:            {value: 0.02, status: fact, source: "Пошлина 2% с 01.04.2025 (kun.uz)"}
+  other_expenses:  {value: 0.02, status: fact, source: "Прочие расходы 2% от референтной цены (Vakhidov Law, 02.2026)"}
+  wholesale:       {value: 0.15, status: fact, source: "Наценка опта до 15% (УП-13; Vakhidov Law)"}
+  retail:          {value: 0.20, status: fact, source: "Наценка аптеки до 20% (УП-13; Vakhidov Law)"}
+  vat:             {value: 0.12, status: fact, source: "НДС 12%; в маржу не входит, зачитывается"}
+
+versions:
+  - id: pp-4554-2020
+    effective_from: 2020-07-01
+    title: "ПП-4554 и положение Минздрава № 3242 (2020)"
+    basket: [HU, RU, UA, PL, TJ, SI, KZ, BG, BY, KG]
+    basket_status: fact
+    basket_source: "10 стран по положению 2020 года (spot.uz, kun.uz)"
+    mean_method: mean
+    mean_status: estimate
+    outlier_ratio: null
+    origin_transport_cap: null
+    cip_window_months: 6
+    cip_component: false
+    generic_cap_vs_original: null
+    rereg_threshold: 0.20
+    review_every_months: 6
+    status: estimate
+    source: "Исходная редакция; детали формулы до 2025 года восстанавливаем по новостям"
+
+  - id: mz-3735-2026
+    effective_from: 2026-03-28
+    title: "Приказ Минздрава № 3735 от 25.12.2025"
+    basket: [HU, RU, UA, PL, TJ, SI, KZ, BG, MD, KG]
+    basket_status: fact
+    basket_source: "Беларусь заменена Молдовой (Vakhidov Law, 02.2026)"
+    mean_method: mean
+    mean_status: estimate
+    mean_source: "«Обобщённое среднее» (norma.uz); точный вид средней сверить с текстом приказа"
+    outlier_ratio: 0.5
+    outlier_source: "Цена не учитывается, если выше цен в двух и более странах больше чем на 50% (Vakhidov Law)"
+    origin_transport_cap: 0.15
+    origin_source: "Цена в стране производства + не более 15% на страхование и транспорт (norma.uz)"
+    cip_window_months: 12
+    cip_component: true
+    cip_source: "Средняя цена ввоза за 12 месяцев по данным таможни, CIP (norma.uz, Vakhidov Law)"
+    generic_cap_vs_original: 0.80
+    generic_status: estimate
+    generic_source: "Дженерик не выше 80% цены оригинала (Vakhidov Law); сверить с текстом приказа"
+    rereg_threshold: 0.15
+    rereg_source: "Порог перерегистрации снижен с 20% до 15% (Vakhidov Law)"
+    review_every_months: 6
+    status: fact
+    source: "lex.uz, приказ № 3735, вступил в силу 28.03.2026"

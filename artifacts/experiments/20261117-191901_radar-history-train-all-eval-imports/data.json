@@ -1,0 +1,168 @@
+{
+  "registry_snapshots": {
+    "2024-11-01": {
+      "rows": 14871,
+      "sha256_uncompressed": "94629b2882b5e6285deeb769e77c1dea3e99cb6110af87258f66ff945e97a75c"
+    },
+    "2024-12-01": {
+      "rows": 14931,
+      "sha256_uncompressed": "0e75e946472d5739f02d1c762788d05bb5fcbfa4f59730443cf53fab61b77410"
+    },
+    "2025-01-01": {
+      "rows": 15007,
+      "sha256_uncompressed": "a6befe852519aa7faac7e2e3cce3927eda8fff552cbbbde57d9ccf9d72238ddf"
+    },
+    "2025-02-01": {
+      "rows": 15113,
+      "sha256_uncompressed": "94ce7b878e45812b4ebd6eec3475c662bb2de19e658b9940c55c61648f07d5fa"
+    },
+    "2025-04-01": {
+      "rows": 15370,
+      "sha256_uncompressed": "1e1226e0b042979df181f6cf87ec4cd65be90c81596835f093f55bacf5997c33"
+    },
+    "2025-05-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "b14977b7d88e563efcc183c631132a8f780d192b53882e5c5339e0a77aec69c3"
+    },
+    "2025-06-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "21378e685aa1b8563f5ab7122019896b295ef9184150921fd5b5ec81689fc92d"
+    },
+    "2025-07-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "5cdcafb3a9a8d21d1f2019b21d155c931cf9fe39dc97e44cc1e78ba52825c3db"
+    },
+    "2025-08-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "30e091c9fcc45c42f2bff85b55fc8539ac69c20c3d0e35277e5300a082a29221"
+    },
+    "2025-09-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "f1990cee6804c86ef69634d683aa1d67c15a715f42f5d5f8f2524c453e723a0b"
+    },
+    "2025-10-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "5a2d294a634cef7b52b0ba2b6db55aba46210226eacc2d704184f496c37d9b96"
+    },
+    "2025-11-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "0cfc428dd0f1181a162af5c5eb60facdb2e1d1ee5b0c494b9f2872b66c596ce0"
+    },
+    "2025-12-01": {
+      "rows": 12187,
+      "sha256_uncompressed": "f1ac253cb9e9110da9bb81d7d9ab8d0a308d50e27c60492ecb19bdb62e9f4e87"
+    },
+    "2026-01-01": {
+      "rows": 12918,
+      "sha256_uncompressed": "3581f30f228485cf87cb31f35a96648e66c2efbc9e86d015254297e2f3dc7b59"
+    },
+    "2026-02-01": {
+      "rows": 13085,
+      "sha256_uncompressed": "909330c52e4e015b4a773a42d807bf58d0b8f37660a19f276fb71208e6da9574"
+    },
+    "2026-03-01": {
+      "rows": 13161,
+      "sha256_uncompressed": "619ae422635f3e86062dffe20d99d57d85d080e7c128bedc1c6a8aae12d18e58"
+    },
+    "2026-04-01": {
+      "rows": 13302,
+      "sha256_uncompressed": "7b42623cf3b3e1e6767be197742093c7f67ad126d3902bac89a8c0c9b869812b"
+    },
+    "2026-05-01": {
+      "rows": 13398,
+      "sha256_uncompressed": "058c9b0fa56b7c2aaced61f28d312ed642911b400ddc8039cf36109f623e8ddf"
+    },
+    "2026-06-01": {
+      "rows": 13549,
+      "sha256_uncompressed": "f041791412b8a86bfe7485c88f54104a62c96af6d62fa3fc1bdeb169a6066a18"
+    },
+    "2026-07-01": {
+      "rows": 13612,
+      "sha256_uncompressed": "9397b2164066eb5d7ed49feb9628fb301f7edf8f3cbd2215b5dfec202dc4151d"
+    },
+    "2026-08-01": {
+      "rows": 13794,
+      "sha256_uncompressed": "028c88b60ba774cd15ee3809ef4b14f38cea31951dc4add3a544f054edcb7698"
+    },
+    "2026-09-01": {
+      "rows": 14052,
+      "sha256_uncompressed": "048e22f8f60287925941d8c904c898e2d7c10f8293ce087e0f34d435deec8736"
+    },
+    "2026-10-01": {
+      "rows": 14216,
+      "sha256_uncompressed": "bbf4eb10995aaa50cce668b4381ff9d4906d1040df08fa4d1bcbe6183ac06344"
+    },
+    "2026-11-01": {
+      "rows": 14526,
+      "sha256_uncompressed": "610ec6f4a369a1a91cef8cdd9ca710e88d27c4ae6cd39a3a135d5dd1ffc310e4"
+    },
+    "2026-11-17": {
+      "rows": 12612,
+      "sha256_uncompressed": "12e2ee5bd1c3c6048c176af92b4e82a6df891a8555ae52fd67155744a7c04c24"
+    }
+  },
+  "reference_files": {
+    "rivaroxaban_tashkent.csv": "834b6fe38aa6f39209f9cc63181182d3de31eb73421828de654bdf00bd422f9a"
+  },
+  "cbu_rate_files": 141,
+  "source": "mpa.uz, реестр референтных цен (снимки API)",
+  "panel_rows": 334185,
+  "snapshots": 25,
+  "asof_now": "2026-11-17",
+  "features": {
+    "set": "history",
+    "numeric": [
+      "log_usd_per_unit",
+      "log_base_usd",
+      "inn_ratio_median",
+      "inn_ratio_min",
+      "inn_rank_pct",
+      "n_brands_inn",
+      "units",
+      "reg_age_years",
+      "months_since_change",
+      "ratio_to_cut_peers",
+      "share_cut_in_group",
+      "inn_mg_ratio_median",
+      "ratio_to_cut_peers_inn_mg",
+      "inn_cut_share",
+      "mfr_cut_share",
+      "mfr_n_packages"
+    ],
+    "categorical": [
+      "local",
+      "currency",
+      "country_group",
+      "form",
+      "has_local_analog",
+      "prior_cut",
+      "single_brand_inn",
+      "has_cut_peers",
+      "inn_untouched"
+    ]
+  },
+  "scope": {
+    "train": "all",
+    "eval": "imports"
+  },
+  "waves": {
+    "A: декабрь 2025 – январь 2026": {
+      "asof": "2025-12-01",
+      "label_end": "2026-02-01",
+      "rows": 10110,
+      "cut_share": 0.1733
+    },
+    "B: июль 2026": {
+      "asof": "2026-06-01",
+      "label_end": "2026-08-01",
+      "rows": 13463,
+      "cut_share": 0.1579
+    },
+    "C: ноябрь 2026": {
+      "asof": "2026-10-01",
+      "label_end": "2026-11-17",
+      "rows": 12213,
+      "cut_share": 0.1367
+    }
+  }
+}

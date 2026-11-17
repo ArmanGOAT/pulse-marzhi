@@ -1,0 +1,698 @@
+<title>Задача №16 по шагам</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column of numbered steps; each step = plain text + one live panel that recomputes the same pack model. */
+:root {
+  --bg: #F2F4F7;
+  --surface: #FFFFFF;
+  --ink: #141C28;
+  --muted: #586274;
+  --line: #D9DEE6;
+  --usd: #2A5BD7;
+  --usd-soft: #DDE6FA;
+  --sum: #B5A48A;
+  --sum-soft: #EEE8DD;
+  --sum-ink: #6E5E44;
+  --loss: #BF3A22;
+  --loss-soft: #F7E0DA;
+  --gain: #1D7F52;
+  --gain-soft: #DAF0E4;
+  --track: #E6EAF0;
+  --f-display: "Unbounded", "Golos Text", system-ui, sans-serif;
+  --f-body: "Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F141C; --surface: #171E29; --ink: #E6EBF2; --muted: #98A3B5; --line: #2A3445;
+    --usd: #7398FF; --usd-soft: #1D2B4C; --sum: #C7B793; --sum-soft: #2C2820; --sum-ink: #D9CBA9;
+    --loss: #FF7C5E; --loss-soft: #3B201A; --gain: #4FC98C; --gain-soft: #15301F; --track: #222B39;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F141C; --surface: #171E29; --ink: #E6EBF2; --muted: #98A3B5; --line: #2A3445;
+  --usd: #7398FF; --usd-soft: #1D2B4C; --sum: #C7B793; --sum-soft: #2C2820; --sum-ink: #D9CBA9;
+  --loss: #FF7C5E; --loss-soft: #3B201A; --gain: #4FC98C; --gain-soft: #15301F; --track: #222B39;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 900px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 96px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font-family: var(--f-display); font-weight: 600; font-size: clamp(28px, 5vw, 42px); line-height: 1.15; letter-spacing: -0.01em; }
+h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(20px, 3vw, 25px); line-height: 1.25; }
+h3 { font-size: 16px; font-weight: 600; }
+p { margin: 0; max-width: 66ch; }
+.eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.lead { font-size: 18px; color: var(--ink); max-width: 62ch; }
+.num, .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.hero { display: flex; flex-direction: column; gap: 16px; padding-bottom: 28px; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 18px; font-size: 14px; color: var(--muted); align-items: center; }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+.b { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; vertical-align: 2px; white-space: nowrap; }
+.b-fact { background: var(--gain-soft); color: var(--gain); }
+.b-est { background: var(--sum-soft); color: var(--sum-ink); }
+.b-ex { background: var(--usd-soft); color: var(--usd); }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 0 8px; }
+.toc a { font-size: 13px; color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: var(--surface); padding: 5px 10px; border-radius: 999px; }
+.toc a:hover, .toc a:focus-visible { border-color: var(--usd); color: var(--usd); outline: none; }
+.toc b { font-family: var(--f-mono); color: var(--usd); margin-right: 6px; font-weight: 600; }
+section.step { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 18px; border-top: 1px solid var(--line); padding-block: 40px; scroll-margin-top: 16px; }
+.stepnum { font-family: var(--f-display); font-weight: 600; font-size: 30px; color: var(--usd); line-height: 1; }
+.body { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.simply { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.simply .eyebrow { color: var(--usd); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.formula { font-family: var(--f-mono); font-size: 14px; background: var(--track); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: nowrap; }
+ul.plain { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 66ch; }
+
+/* chain */
+.chain { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.node { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 6px; position: relative; }
+.node .who { font-weight: 600; }
+.node .price { font-family: var(--f-mono); font-size: 18px; font-weight: 600; }
+.node .note { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.node.us { border-color: var(--usd); }
+.node.us .who::after { content: "наш пользователь"; display: block; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--usd); font-weight: 600; margin-top: 2px; }
+.gov { border: 1px dashed var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; color: var(--muted); }
+
+/* controls */
+.ctrl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; }
+.ctrl label { font-size: 14px; font-weight: 500; }
+.ctrl output { font-family: var(--f-mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ctrl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--usd); }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 24px; }
+input[type=range]:focus-visible, button:focus-visible { outline: 2px solid var(--usd); outline-offset: 3px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 3px; flex-wrap: wrap; }
+.seg button { font: inherit; font-size: 14px; border: 0; background: transparent; color: var(--ink); padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--usd); color: var(--surface); }
+
+/* kpis */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.kpi { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.kpi .k { font-size: 13px; color: var(--muted); }
+.kpi .v { font-family: var(--f-mono); font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.kpi .s { font-size: 13px; color: var(--muted); }
+.kpi.bad { background: var(--loss-soft); border-color: transparent; }
+.kpi.bad .v { color: var(--loss); }
+.kpi.good { background: var(--gain-soft); border-color: transparent; }
+.kpi.good .v { color: var(--gain); }
+
+/* waterfall */
+.wf { display: flex; flex-direction: column; gap: 2px; }
+.wf-row { display: grid; grid-template-columns: 210px minmax(0, 1fr) 118px; gap: 12px; align-items: center; font-size: 14px; padding: 5px 6px; border-radius: 6px; border: 0; background: transparent; color: inherit; font-family: inherit; text-align: left; width: 100%; cursor: pointer; }
+.wf-row:hover, .wf-row[aria-expanded="true"] { background: var(--track); }
+.wf-row.static { cursor: default; }
+.wf-row.static:hover { background: transparent; }
+.wf-track { position: relative; height: 16px; }
+.wf-bar { position: absolute; top: 0; height: 100%; border-radius: 3px; min-width: 2px; }
+.wf-val { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wf-val small { color: var(--muted); font-size: 12px; margin-left: 4px; }
+.wf-row.total .wf-lab, .wf-row.margin .wf-lab { font-weight: 600; }
+.detail { border-top: 1px solid var(--line); padding-top: 12px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
+.detail .formula { font-size: 13px; }
+
+/* simple bars */
+.hbar { display: grid; grid-template-columns: 170px minmax(0, 1fr) 96px; gap: 12px; align-items: center; font-size: 14px; }
+.htrack { position: relative; height: 22px; background: var(--track); border-radius: 4px; overflow: hidden; display: flex; }
+.hseg { height: 100%; }
+.hval { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.minmark { font-size: 12px; font-weight: 600; color: var(--usd); }
+.verdict { font-size: 15px; padding: 10px 14px; border-radius: 10px; background: var(--track); }
+.verdict.bad { background: var(--loss-soft); color: var(--loss); }
+.verdict.good { background: var(--gain-soft); color: var(--gain); }
+
+/* timeline */
+.tl { display: flex; flex-direction: column; gap: 0; border-left: 2px solid var(--line); margin-left: 6px; }
+.tl div { position: relative; padding: 0 0 12px 18px; font-size: 15px; }
+.tl div::before { content: ""; position: absolute; left: -7px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--usd); }
+.tl b { font-family: var(--f-mono); font-weight: 600; margin-right: 8px; }
+
+/* pipeline */
+.pipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.mod { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface); }
+.mod.ml { border-color: var(--usd); background: var(--usd-soft); }
+.mod .t { font-weight: 600; }
+.mod .io { font-size: 13px; line-height: 1.45; }
+.mod .io span { display: block; color: var(--muted); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
+.tag { align-self: flex-start; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: var(--track); color: var(--muted); }
+.mod.ml .tag { background: var(--usd); color: var(--surface); }
+
+/* table */
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 560px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.yes { color: var(--gain); font-weight: 600; }
+.no { color: var(--loss); font-weight: 600; }
+
+/* glossary */
+.gloss { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.term { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--surface); }
+.term b { display: block; margin-bottom: 2px; }
+.term span { font-size: 14px; color: var(--muted); }
+
+@media (max-width: 720px) {
+  section.step { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .chain, .pipe { grid-template-columns: minmax(0, 1fr); }
+  .wf-row { grid-template-columns: minmax(0, 1fr) 104px; }
+  .wf-track { grid-column: 1 / -1; grid-row: 2; }
+  .hbar { grid-template-columns: minmax(0, 1fr) 86px; }
+  .htrack { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wf-bar, .hseg { transition: left .25s ease, width .25s ease; }
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Хакатон · Задача №16 · ривароксабан 20 мг</div>
+    <h1>Задача №16 по шагам</h1>
+    <p class="lead">Компания покупает лекарство за границей за доллары, а продаёт в Узбекистане за сумы. Дороже потолка, который ставит государство, продавать нельзя. Ниже по шагам разбираем, куда уходят деньги из одной упаковки, почему импортёр почти ничего не зарабатывает и где в решении нужен ML.</p>
+    <div class="legend">
+      <span><span class="b b-fact">факт</span> условие задачи, закон, новости</span>
+      <span><span class="b b-est">оценка</span> наше допущение, надо проверить</span>
+      <span><span class="b b-ex">пример</span> цифры для объяснения</span>
+      <span><span class="swatch" style="background:var(--usd)"></span>затраты в долларах</span>
+      <span><span class="swatch" style="background:var(--sum)"></span>затраты в сумах</span>
+    </div>
+    <nav class="toc" aria-label="Шаги">
+      <a href="#s1"><b>1</b>Кто участвует</a>
+      <a href="#s2"><b>2</b>Откуда потолок</a>
+      <a href="#s3"><b>3</b>Что такое маржа</a>
+      <a href="#s4"><b>4</b>Куда уходят 150 000</a>
+      <a href="#s5"><b>5</b>Почему маржа упала</a>
+      <a href="#s6"><b>6</b>Два удара пересмотра</a>
+      <a href="#s7"><b>7</b>Ловушка формулы</a>
+      <a href="#s8"><b>8</b>Что строим</a>
+      <a href="#s9"><b>9</b>Где ML решает</a>
+      <a href="#s10"><b>10</b>Словарь</a>
+    </nav>
+  </header>
+
+  <!-- 1 -->
+  <section class="step" id="s1">
+    <div class="stepnum">1</div>
+    <div class="body">
+      <h2>Кто участвует и как идут деньги</h2>
+      <p>Берём одну упаковку ривароксабана 20 мг: 28 таблеток, это месяц приёма. Лекарство разжижает кровь и защищает от инсульта и тромбов. Его пьют каждый день годами, поэтому если оно пропадёт из аптек, пациенту придётся срочно менять лечение.</p>
+      <p>Импортёр продаёт <b>150 000 упаковок в год</b> по <b>150 000 сумов</b>. Выручка 22,5 млрд сумов в год. <span class="b b-fact">факт</span></p>
+      <div class="chain">
+        <div class="node">
+          <div class="who">Производитель за границей</div>
+          <div class="price">$9,05</div>
+          <div class="note">≈ 108 600 сумов при курсе 12 000. Импортёр платит в долларах. <span class="b b-est">оценка</span></div>
+        </div>
+        <div class="node us">
+          <div class="who">Импортёр</div>
+          <div class="price">150 000</div>
+          <div class="note">Ввозит, растамаживает, хранит, продвигает у врачей. Продаёт оптовику не дороже потолка. <span class="b b-fact">факт</span></div>
+        </div>
+        <div class="node">
+          <div class="who">Оптовик</div>
+          <div class="price">≤ 172 500</div>
+          <div class="note">Наценка не больше 15%, сколько бы посредников ни было. <span class="b b-fact">факт</span></div>
+        </div>
+        <div class="node">
+          <div class="who">Аптека → пациент</div>
+          <div class="price">≤ 207 000</div>
+          <div class="note">Наценка не больше 20%. Продаёт по электронному рецепту. <span class="b b-fact">факт</span></div>
+        </div>
+      </div>
+      <div class="gov">Сверху над всеми стоит государство (Фармагентство при Минздраве). Оно считает потолок цены и следит, чтобы его не превышали.</div>
+      <p class="muted">Для сравнения: в аптеках Ташкента 8 брендов ривароксабана 20 мг стоят от 137 до 289 тыс. сумов за 28 таблеток (liki.uz, 17 ноября 2026). <span class="b b-fact">факт</span></p>
+      <div class="simply"><div class="eyebrow">Проще говоря</div><p>Импортёр платит в долларах, получает в сумах, а цену продажи не выбирает. Он может управлять только своими затратами.</p></div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="step" id="s2">
+    <div class="stepnum">2</div>
+    <div class="body">
+      <h2>Откуда берётся потолок 150 000</h2>
+      <p>Рецептурные лекарства нельзя продавать дороже предельной цены. С марта 2026 года налоговая сама не регистрирует счёт-фактуру, если оптовая цена выше лимита. Поэтому обойти потолок нельзя. <span class="b b-fact">факт</span></p>
+      <p>Предельную цену считает информационная система по приказу Минздрава № 3735. Она берёт три числа и выбирает <b>наименьшее</b>: <span class="b b-fact">факт</span></p>
+      <ul class="plain">
+        <li><b>Средняя цена в референтных странах.</b> Это 10 стран, с которыми Узбекистан сравнивает цены. Цену, которая больше чем на 50% выше двух других стран, отбрасывают.</li>
+        <li><b>Цена в стране производства</b> плюс не больше 15% на доставку и страховку.</li>
+        <li><b>Средняя таможенная цена ввоза</b> за последние 12 месяцев. Это то, сколько импортёры реально платили за товар с доставкой до границы.</li>
+      </ul>
+      <p class="muted">Из выбранной цены потом по фиксированным правилам считают потолок для импортёра: добавляют пошлину, расходы и налоги. Ниже, чтобы было проще сравнивать, все три числа уже пересчитаны в потолок для импортёра.</p>
+      <div class="panel" aria-label="Калькулятор потолка">
+        <div class="ctrls">
+          <div class="ctrl"><label for="f-ref">Средняя по референтным странам</label><output id="o-ref"></output><input type="range" id="f-ref" min="100" max="220" step="1" value="150"></div>
+          <div class="ctrl"><label for="f-orig">Цена в стране производства + 15%</label><output id="o-orig"></output><input type="range" id="f-orig" min="100" max="220" step="1" value="185"></div>
+          <div class="ctrl"><label for="f-cip">Таможенная цена за 12 месяцев</label><output id="o-cip"></output><input type="range" id="f-cip" min="100" max="220" step="1" value="158"></div>
+        </div>
+        <div class="stack" id="ceil-bars"></div>
+        <div class="verdict" id="ceil-out"></div>
+        <p class="muted" style="font-size:14px">Цифры в калькуляторе <span class="b b-ex">пример</span>, в тысячах сумов. Подвигай ползунки: потолок всегда равен самому короткому столбику.</p>
+      </div>
+      <h3>Пересмотры: потолок меняется, и часто</h3>
+      <div class="tl">
+        <div><b>5 дек 2025</b>Снижены потолки около 1 970 импортных препаратов. Агентство считает завышенными цены 35% импортных позиций. <span class="b b-fact">факт</span></div>
+        <div><b>янв–мар 2026</b>Оптовые цены около 2 000 препаратов упали на 40–60%, в аптеках с 1 марта. <span class="b b-fact">факт</span></div>
+        <div><b>апр 2026</b>Анонсировано снижение ещё примерно у 4 000 импортных препаратов. Цель на год около 6 000. <span class="b b-fact">факт</span></div>
+        <div><b>1 июл 2026</b>Новые потолки для 2 500 рецептурных препаратов. Сердечно-сосудистые подешевели до 37%. <span class="b b-fact">факт</span></div>
+        <div><b>дальше</b>Реестр цен анализируют каждые 6 месяцев. Если реальные цены упали на 15% и больше, цену обязаны перерегистрировать. <span class="b b-fact">факт</span></div>
+      </div>
+      <div class="simply"><div class="eyebrow">Проще говоря</div><p>Потолок считают по формуле, и его регулярно пересчитывают. Каждый пересчёт может срезать цену, а импортёр узнаёт об этом, когда товар уже закуплен.</p></div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="step" id="s3">
+    <div class="stepnum">3</div>
+    <div class="body">
+      <h2>Что такое маржа</h2>
+      <p>Маржа показывает, какая доля цены остаётся импортёру после всех затрат.</p>
+      <div class="formula">маржа = (цена − все затраты) / цена</div>
+      <p>Пример из нашей модели: 150 000 − 146 649 = <b class="num">3 351</b> сум остаётся с упаковки. 3 351 / 150 000 = <b class="num">2,2%</b>. За год это 3 351 × 150 000 упаковок ≈ <b class="num">0,5 млрд</b> сумов. <span class="b b-est">оценка</span></p>
+      <p>Раньше маржа была 25–30%. При тех же продажах это 5,6–6,8 млрд в год. Сейчас 2–3%. <span class="b b-fact">факт</span></p>
+      <p><b>П.п.</b> (процентный пункт) это разница между процентами. Маржа выросла с 2% до 5%, значит она выросла на 3 п.п.</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="step" id="s4">
+    <div class="stepnum">4</div>
+    <div class="body">
+      <h2>Куда уходят 150 000 сумов</h2>
+      <p>Затраты импортёра делятся на 10 статей. Нажми на любую строку: появится объяснение и формула. Синие статьи платятся в долларах, поэтому растут вместе с курсом.</p>
+      <div class="panel">
+        <div class="ctrl">
+          <label for="fx">Курс доллара, сумов</label><output id="o-fx"></output>
+          <input type="range" id="fx" min="11000" max="13500" step="25" value="12000">
+        </div>
+        <div class="kpis" id="pack-kpis"></div>
+        <div class="wf" id="wf"></div>
+        <div class="detail" id="wf-detail" hidden></div>
+        <p class="muted" style="font-size:14px">Все затраты <span class="b b-est">оценка</span>: они подобраны так, чтобы при курсе 12 000 вышла маржа 2,2% из условия. Курс ЦБ в январе–июле 2026 ходил в коридоре 11 910–12 320. <span class="b b-fact">факт</span></p>
+      </div>
+      <div class="simply"><div class="eyebrow">Проще говоря</div><p>Почти 80% затрат привязано к доллару. Доллар +1% съедает примерно 0,8 п.п. маржи. При курсе около 12 322 импортёр уже в убытке. Поставь ползунок на 12 360 (+3%) и увидишь минус.</p></div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="step" id="s5">
+    <div class="stepnum">5</div>
+    <div class="body">
+      <h2>Почему маржа упала с ~27% до 2%</h2>
+      <p>Проверим простую мысль. Оставим все затраты как есть и спросим: при какой цене маржа была бы около 27%? Ответ: примерно при 202 000 сумов.</p>
+      <div class="panel">
+        <div class="stack" id="before-after"></div>
+        <p class="muted" style="font-size:14px">Серым показаны затраты, тёмным маржа. Расчёт на нашей модели <span class="b b-est">оценка</span>.</p>
+      </div>
+      <p>Значит, потолок срезали примерно на четверть, со ~202 000 до 150 000, а затраты остались прежними. Доллар тут не главный виновник: в 2025 году сум даже укрепился к доллару почти на 7%. <span class="b b-fact">факт</span></p>
+      <div class="simply"><div class="eyebrow">Проще говоря</div><p>Маржу съело снижение потолка. Курс станет главной угрозой дальше, потому что запас прочности теперь всего 2%.</p></div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="step" id="s6">
+    <div class="stepnum">6</div>
+    <div class="body">
+      <h2>Пересмотр бьёт дважды</h2>
+      <p><b>Удар 1: цена на будущее.</b> После пересмотра каждая следующая упаковка продаётся дешевле, а затраты те же. При марже 2,2% любое снижение больше 2% это уже убыток.</p>
+      <p><b>Удар 2: склад.</b> Импортёр возит товар большими партиями, 2 раза в год. Партия рассчитана на 6 месяцев продаж. В среднем на складе лежит половина партии (3 месяца) плюс страховой запас на 1 месяц. Итого около 4 месяцев продаж, это примерно 50 000 упаковок. За них уже заплачено по старым условиям. После пересмотра продать их можно только по новому потолку: счёт-фактуру дороже лимита налоговая не пропустит.</p>
+      <div class="panel">
+        <div class="ctrls">
+          <div class="ctrl"><label for="cut">На сколько снизят потолок</label><output id="o-cut"></output><input type="range" id="cut" min="0" max="40" step="1" value="20"></div>
+          <div class="ctrl"><label for="months">Сколько месяцев продаж на складе в день пересмотра</label><output id="o-months"></output><input type="range" id="months" min="1" max="6" step="0.5" value="4"></div>
+        </div>
+        <div class="kpis" id="hit-kpis"></div>
+        <p class="muted" style="font-size:14px">Расчёт <span class="b b-est">оценка</span>. Сравнение идёт с нынешней прибылью около 0,5 млрд в год.</p>
+      </div>
+      <p>Это не теория. После январского пересмотра глава Фармагентства признал, что дистрибьюторы понесли потери: они закупили товар дороже. Президент поддержал возврат им около $20 млн. <span class="b b-fact">факт</span></p>
+      <div class="simply"><div class="eyebrow">Проще говоря</div><p>Один пересмотр на 20% забирает со склада около 1,5 млрд разом. Это примерно три годовые прибыли импортёра.</p></div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="step" id="s7">
+    <div class="stepnum">7</div>
+    <div class="body">
+      <h2>Ловушка формулы: какую выгоду заберут</h2>
+      <p>Вспомни третье число из шага 2: средняя таможенная цена ввоза. Если именно оно сейчас самое маленькое, потолок привязан к тому, сколько импортёр платит производителю.</p>
+      <p>Допустим, импортёр выбил у производителя скидку. Сейчас маржа растёт. Но таможенная цена тоже падает, и при следующем пересмотре потолок опустится вслед за ней.</p>
+      <div class="panel">
+        <div class="ctrls">
+          <div class="ctrl"><label for="disc">Скидка у производителя</label><output id="o-disc"></output><input type="range" id="disc" min="0" max="15" step="1" value="7"></div>
+          <div class="stack" style="gap:6px">
+            <span style="font-size:14px;font-weight:500" id="bind-label">Что сейчас определяет потолок</span>
+            <div class="seg" role="group" aria-labelledby="bind-label">
+              <button type="button" id="bind-ref" aria-pressed="true">Средняя по странам</button>
+              <button type="button" id="bind-cip" aria-pressed="false">Таможенная цена</button>
+            </div>
+          </div>
+        </div>
+        <div class="kpis" id="trap-kpis"></div>
+        <div class="verdict" id="trap-out"></div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Рычаг</th><th>Что меняет</th><th>Останется у импортёра после пересмотра?</th></tr></thead>
+          <tbody>
+            <tr><td>Скидка у производителя, совместная закупка</td><td>Цену товара на границе</td><td class="no">Может уйти, если потолок считают от таможенной цены</td></tr>
+            <tr><td>Дешевле международная доставка</td><td>Цену товара на границе (доставка входит в таможенную цену)</td><td class="no">Может уйти по той же причине</td></tr>
+            <tr><td>Чаще и мельче поставки</td><td>Склад, деньги в запасах, списания</td><td class="yes">Да, это затраты после границы</td></tr>
+            <tr><td>Цифровой маркетинг вместо части визитов</td><td>Маркетинг</td><td class="yes">Да</td></tr>
+            <tr><td>Доставка по регионам, отсрочка аптекам</td><td>Затраты внутри страны</td><td class="yes">Да</td></tr>
+            <tr><td>Локализация (упаковка, фасовка, производство)</td><td>Препарат становится местным, правила цены другие</td><td>Надо проверить по приказу</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="simply"><div class="eyebrow">Проще говоря</div><p>Нужно знать, какое из трёх чисел определяет потолок. От этого зависит, какие улучшения достанутся импортёру, а какие государство заберёт при следующем пересмотре. Прятать скидку от таможни нельзя: это уже нарушение.</p></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="step" id="s8">
+    <div class="stepnum">8</div>
+    <div class="body">
+      <h2>Что строим</h2>
+      <p>Система отвечает на вопрос финансового директора: «если цену снова снизят или доллар вырастет, останусь ли я в плюсе и что сделать уже сейчас?» Она состоит из четырёх частей, данные идут слева направо.</p>
+      <div class="pipe">
+        <div class="mod">
+          <span class="tag">формула</span>
+          <div class="t">Калькулятор потолка</div>
+          <div class="io"><span>получает</span>цены в референтных странах, цену оригинала, таможенную цену<span>отдаёт</span>каким станет потолок при пересчёте и какое из трёх чисел его определяет</div>
+        </div>
+        <div class="mod ml">
+          <span class="tag">ML</span>
+          <div class="t">Радар пересмотра</div>
+          <div class="io"><span>получает</span>прошлые пересмотры тысяч препаратов и разрыв между потолком и формулой<span>отдаёт</span>вероятность, что наш препарат снизят в ближайшей волне, и насколько</div>
+        </div>
+        <div class="mod">
+          <span class="tag">оптимизация</span>
+          <div class="t">План мер</div>
+          <div class="io"><span>получает</span>затраты упаковки, вероятность из радара, правила<span>отдаёт</span>что менять по месяцам: партии, доставка, контракт, маркетинг, локализация</div>
+        </div>
+        <div class="mod">
+          <span class="tag">симуляция</span>
+          <div class="t">Риск</div>
+          <div class="io"><span>получает</span>план и тысячи вариантов будущего: курс, спрос, доставка, пересмотр<span>отдаёт</span>вероятность убытка с планом и без него</div>
+        </div>
+      </div>
+      <p><b>Жёсткие правила плана.</b> Цену не поднимаем. Запас на складе никогда не меньше месяца продаж, потому что пациенту нельзя резко бросать лекарство. Вероятность убытка у рекомендованного плана не выше 10%. Скидки от таможни не прячем.</p>
+      <p><b>Новый рычаг.</b> В контракт с производителем можно добавить пункт: если государство снижает потолок, производитель компенсирует обесценение товара на складе. Радар даёт ожидаемый убыток в сумах, это аргумент для переговоров. <span class="b b-est">оценка</span></p>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="step" id="s9">
+    <div class="stepnum">9</div>
+    <div class="body">
+      <h2>Где ML решает деньги</h2>
+      <p>Формула говорит, каким станет потолок, <i>если</i> наш препарат пересчитают. Но пересчитают ли его в ближайшей волне и насколько снизят, решает агентство. Это и предсказывает модель: она учится на прошлых пересмотрах, какие препараты попадали под снижение и на сколько.</p>
+      <p>Зачем это импортёру? Объём закупки решают за 2–6 месяцев до пересмотра. Есть два варианта:</p>
+      <ul class="plain">
+        <li><b>Ничего не менять.</b> На дату пересмотра на складе около 4 месяцев продаж, 50 000 упаковок.</li>
+        <li><b>Подготовиться.</b> Заранее разбить поставку на мелкие, чтобы на дату пересмотра было около 1,5 месяца, 18 750 упаковок. Это стоит денег: больше поставок, больше оформления.</li>
+      </ul>
+      <div class="panel">
+        <div class="ctrls">
+          <div class="ctrl"><label for="p">Вероятность снижения от радара</label><output id="o-p"></output><input type="range" id="p" min="0" max="100" step="1" value="60"></div>
+          <div class="ctrl"><label for="cut2">Размер снижения</label><output id="o-cut2"></output><input type="range" id="cut2" min="5" max="40" step="1" value="20"></div>
+          <div class="ctrl"><label for="prep">Стоимость подготовки, млрд</label><output id="o-prep"></output><input type="range" id="prep" min="0.05" max="0.5" step="0.01" value="0.15"></div>
+        </div>
+        <div class="stack" id="dec-bars"></div>
+        <div class="verdict" id="dec-out"></div>
+        <p class="muted" style="font-size:14px">«Ожидаемый убыток» это убыток, умноженный на вероятность снижения. Цифры <span class="b b-est">оценка</span>.</p>
+      </div>
+      <p>Подвигай вероятность. При 10% выгоднее ничего не делать, при 60% выгоднее подготовиться. Без модели импортёр не знает, какой из этих случаев у него, и решает наугад.</p>
+      <p><b>Как проверяем модель.</b> Учим её на пересмотре декабря 2025, проверяем на июле 2026, чтобы она не видела будущего. Кроме точности считаем деньги: сколько убытка на складе спасли бы её решения по сравнению с простым правилом и с бездействием.</p>
+      <div class="simply"><div class="eyebrow">Проще говоря</div><p>Вероятность из модели напрямую меняет решение, сколько везти и когда. Поэтому ML здесь нужен для решения, а не для красоты.</p></div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="step" id="s10">
+    <div class="stepnum">10</div>
+    <div class="body">
+      <h2>Словарь</h2>
+      <div class="gloss">
+        <div class="term"><b>Импортёр</b><span>Компания, которая покупает лекарство за границей за доллары и продаёт в Узбекистане за сумы.</span></div>
+        <div class="term"><b>Потолок, предельная цена</b><span>Максимальная цена, по которой разрешено продавать препарат.</span></div>
+        <div class="term"><b>Референтная цена</b><span>Цена, которую считают по формуле из шага 2. Из неё выводят потолок.</span></div>
+        <div class="term"><b>Референтные страны</b><span>10 стран, с ценами в которых сравнивают цену в Узбекистане.</span></div>
+        <div class="term"><b>Пересмотр</b><span>Государство пересчитывает потолки. Последние волны: декабрь 2025, март и июль 2026.</span></div>
+        <div class="term"><b>Таможенная цена (CIP)</b><span>Цена товара с доставкой и страховкой до границы Узбекистана.</span></div>
+        <div class="term"><b>Пошлина</b><span>Налог на ввоз: 2% от таможенной стоимости.</span></div>
+        <div class="term"><b>Маржа</b><span>Доля цены, которая остаётся после всех затрат: (цена − затраты) / цена.</span></div>
+        <div class="term"><b>П.п.</b><span>Процентный пункт: разница между процентами. С 2% до 5% это +3 п.п.</span></div>
+        <div class="term"><b>Страховой запас</b><span>Запас на случай задержки поставки. По нашим правилам не меньше месяца продаж.</span></div>
+        <div class="term"><b>Локализация</b><span>Перенос упаковки или производства в Узбекистан, чтобы часть затрат была в сумах.</span></div>
+        <div class="term"><b>Вероятность</b><span>Насколько часто событие случается. 60% значит: в 6 случаях из 10.</span></div>
+        <div class="term"><b>Монте-Карло</b><span>Проиграть тысячи случайных вариантов будущего и посмотреть, как часто будет убыток.</span></div>
+        <div class="term"><b>AUC</b><span>Насколько хорошо модель отличает «снизят» от «не снизят»: 0,5 как монетка, 1 идеально.</span></div>
+        <div class="term"><b>Бейзлайн</b><span>Самое простое решение без ML, с которым сравниваем модель.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  // ---- Модель упаковки (как в src/pack.py, базовая стратегия «как сейчас») ----
+  var PRICE = 150000, VOLUME = 150000, PURCHASE_USD = 9.05, DELIVERY_USD = 0.40;
+  var MONEY = 0.22, STORAGE = 0.04, STOCK_MONTHS_FIN = 3.5, WRITEOFF = 0.009;
+  var RECV = MONEY * 45 / 365;
+
+  var ITEMS = [
+    { k: "purchase", label: "Закупка у производителя", cur: "usd",
+      why: "Сколько импортёр платит производителю за упаковку. Самая большая статья, около 72% цены.",
+      f: function (m) { return "$9,05 × курс " + fmt(m.fx) + " = " + fmt(m.purchase); } },
+    { k: "delivery", label: "Международная доставка", cur: "usd",
+      why: "Перевозка от завода до Узбекистана автотранспортом. Авиа стоит $0,75, ж/д + авто $0,28 за упаковку.",
+      f: function (m) { return "$0,40 × курс " + fmt(m.fx) + " = " + fmt(m.delivery); } },
+    { k: "duty", label: "Пошлина 2%", cur: "usd",
+      why: "Налог на ввоз. Считается от стоимости товара вместе с доставкой. Ставка 2% это факт с апреля 2025.",
+      f: function (m) { return "2% × (" + fmt(m.purchase) + " + " + fmt(m.delivery) + ") = " + fmt(m.duty); } },
+    { k: "clearance", label: "Оформление и контроль серии", cur: "sum",
+      why: "Растаможка и проверка качества каждой партии. Платится за каждую поставку, а поставок 2 в год.",
+      f: function () { return "45 млн × 2 поставки / 150 000 упаковок = 600"; } },
+    { k: "inventory", label: "Склад и деньги в запасах", cur: "sum",
+      why: "Товар уже оплачен, но лежит и ещё не продан, в среднем около 3,5 месяца. Эти деньги могли бы приносить 22% годовых, плюс 4% в год стоит само хранение.",
+      f: function (m) { return fmt(m.purchase) + " × 26% × 3,5 / 12 = " + fmt(m.inventory); } },
+    { k: "writeoff", label: "Списания по сроку годности", cur: "usd",
+      why: "Чем больше партия, тем больше упаковок не успевают продать до конца срока. При партии на 6 месяцев списывается около 0,9% закупки.",
+      f: function (m) { return fmt(m.purchase) + " × 0,9% = " + fmt(m.writeoff); } },
+    { k: "receivables", label: "Отсрочка платежа аптекам", cur: "sum",
+      why: "Аптеки и оптовики платят через 45 дней. Всё это время импортёр по сути кредитует их под 22% годовых.",
+      f: function () { return "150 000 × 22% × 45 / 365 = " + fmt(PRICE * RECV); } },
+    { k: "regional", label: "Доставка по регионам", cur: "sum",
+      why: "Развоз по стране от склада в Ташкенте до оптовиков и аптек в регионах.",
+      f: function () { return "3 600 за упаковку"; } },
+    { k: "marketing", label: "Маркетинг", cur: "sum",
+      why: "Медицинские представители ходят к врачам, чтобы те назначали именно этот бренд. 1,5 млрд в год делим на все упаковки.",
+      f: function () { return "1,5 млрд / 150 000 = 10 000"; } },
+    { k: "regulatory", label: "Регистрация и фармаконадзор", cur: "sum",
+      why: "Регистрация препарата, контроль безопасности, документы. Около 525 млн в год.",
+      f: function () { return "525 млн / 150 000 = 3 500"; } }
+  ];
+
+  function model(fx, price, purchaseUsd) {
+    fx = fx || 12000; price = price || PRICE; purchaseUsd = purchaseUsd || PURCHASE_USD;
+    var m = { fx: fx, price: price };
+    m.purchase = purchaseUsd * fx;
+    m.delivery = DELIVERY_USD * fx;
+    m.duty = 0.02 * (m.purchase + m.delivery);
+    m.clearance = 45e6 * 2 / VOLUME;
+    m.inventory = m.purchase * (MONEY + STORAGE) * STOCK_MONTHS_FIN / 12;
+    m.writeoff = m.purchase * WRITEOFF;
+    m.receivables = price * RECV;
+    m.regional = 3600;
+    m.marketing = 1.5e9 / VOLUME;
+    m.regulatory = 525e6 / VOLUME;
+    m.total = 0; m.usdTotal = 0;
+    ITEMS.forEach(function (it) { m.total += m[it.k]; if (it.cur === "usd") m.usdTotal += m[it.k]; });
+    m.margin = price - m.total;
+    m.marginPct = m.margin / price;
+    return m;
+  }
+  function breakevenFx() {
+    // маржа линейна по курсу: ищем курс, где маржа = 0
+    var a = model(12000), b = model(13000);
+    var slope = (b.margin - a.margin) / 1000;
+    return 12000 - a.margin / slope;
+  }
+
+  var nf0 = new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 });
+  var nf1 = new Intl.NumberFormat("ru-RU", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  var nf2 = new Intl.NumberFormat("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function fmt(x) { return nf0.format(Math.round(x)); }
+  function pct(x) { return nf1.format(x * 100) + "%"; }
+  function bn(x) { return nf2.format(x / 1e9) + " млрд"; }
+  function $(id) { return document.getElementById(id); }
+  function kpi(k, v, s, cls) {
+    return '<div class="kpi ' + (cls || "") + '"><div class="k">' + k + '</div><div class="v">' + v + '</div>' + (s ? '<div class="s">' + s + '</div>' : "") + "</div>";
+  }
+  var BASE = model(12000);
+  var PROFIT_NOW = BASE.margin * VOLUME;
+
+  // ---- Шаг 2: калькулятор потолка ----
+  var CEIL = [
+    { id: "f-ref", out: "o-ref", label: "Средняя по странам" },
+    { id: "f-orig", out: "o-orig", label: "Страна производства + 15%" },
+    { id: "f-cip", out: "o-cip", label: "Таможенная цена" }
+  ];
+  function drawCeil() {
+    var vals = CEIL.map(function (c) { return +$(c.id).value; });
+    var min = Math.min.apply(null, vals), idx = vals.indexOf(min);
+    var html = "";
+    CEIL.forEach(function (c, i) {
+      $(c.out).textContent = vals[i] + " тыс.";
+      var w = vals[i] / 220 * 100;
+      var isMin = i === idx;
+      html += '<div class="hbar"><span>' + c.label + (isMin ? ' <span class="minmark">← потолок</span>' : "") + '</span>' +
+        '<div class="htrack"><div class="hseg" style="width:' + w + '%;background:' + (isMin ? "var(--usd)" : "var(--sum)") + '"></div></div>' +
+        '<span class="hval">' + vals[i] + ' тыс.</span></div>';
+    });
+    $("ceil-bars").innerHTML = html;
+    var note = idx === 2
+      ? "Потолок определяет таможенная цена самого импортёра. Если он купит дешевле, при пересмотре потолок тоже опустится (шаг 7)."
+      : idx === 0
+        ? "Потолок определяют цены в других странах. Если там подешевеет, потолок снизят при следующем пересмотре."
+        : "Потолок определяет цена в стране производства.";
+    $("ceil-out").innerHTML = "Потолок = <b class='num'>" + min + " тыс.</b> " + note;
+  }
+  CEIL.forEach(function (c) { $(c.id).addEventListener("input", drawCeil); });
+
+  // ---- Шаг 4: водопад затрат ----
+  var openItem = null;
+  function drawPack() {
+    var fx = +$("fx").value;
+    var m = model(fx);
+    var shift = (fx / 12000 - 1) * 100;
+    $("o-fx").textContent = fmt(fx) + (Math.abs(shift) >= 0.05 ? " (" + (shift > 0 ? "+" : "") + nf1.format(shift) + "%)" : "");
+    var be = breakevenFx();
+    $("pack-kpis").innerHTML =
+      kpi("Маржа с упаковки", fmt(m.margin) + " сум", "", m.margin < 0 ? "bad" : "") +
+      kpi("Маржа", pct(m.marginPct), "было 25–30%", m.margin < 0 ? "bad" : "") +
+      kpi("Затраты в долларах", pct(m.usdTotal / m.total), "доля от всех затрат") +
+      kpi("Прибыль за год", bn(m.margin * VOLUME), "убыток начинается при курсе " + fmt(be), m.margin < 0 ? "bad" : "");
+
+    var D = Math.max(PRICE, m.total);
+    var rows = '<div class="wf-row static total"><span class="wf-lab">Потолок цены</span><div class="wf-track"><div class="wf-bar" style="left:0;width:' + (PRICE / D * 100) + '%;background:var(--track)"></div></div><span class="wf-val">' + fmt(PRICE) + '<small>100%</small></span></div>';
+    var start = m.total;
+    ITEMS.forEach(function (it) {
+      var v = m[it.k];
+      start -= v;
+      var left = start / D * 100, w = v / D * 100;
+      rows += '<button type="button" class="wf-row" data-k="' + it.k + '" aria-expanded="' + (openItem === it.k) + '">' +
+        '<span class="wf-lab">' + it.label + '</span>' +
+        '<div class="wf-track"><div class="wf-bar" style="left:' + left + '%;width:' + w + '%;background:' + (it.cur === "usd" ? "var(--usd)" : "var(--sum)") + '"></div></div>' +
+        '<span class="wf-val">' + fmt(v) + '<small>' + nf1.format(v / PRICE * 100) + '%</small></span></button>';
+    });
+    var mw = Math.abs(m.margin) / D * 100;
+    var mleft = m.margin >= 0 ? 0 : PRICE / D * 100;
+    rows += '<div class="wf-row static margin"><span class="wf-lab">Маржа импортёра</span><div class="wf-track"><div class="wf-bar" style="left:' + mleft + '%;width:' + mw + '%;background:' + (m.margin >= 0 ? "var(--ink)" : "var(--loss)") + '"></div></div><span class="wf-val" style="color:' + (m.margin >= 0 ? "var(--ink)" : "var(--loss)") + '">' + fmt(m.margin) + '<small>' + pct(m.marginPct) + '</small></span></div>';
+    $("wf").innerHTML = rows;
+    Array.prototype.forEach.call(document.querySelectorAll("#wf button.wf-row"), function (b) {
+      b.addEventListener("click", function () { openItem = openItem === b.dataset.k ? null : b.dataset.k; drawPack(); });
+    });
+    var det = $("wf-detail");
+    if (openItem) {
+      var it = ITEMS.filter(function (x) { return x.k === openItem; })[0];
+      det.innerHTML = "<b>" + it.label + " · " + (it.cur === "usd" ? "в долларах" : "в сумах") + "</b><p>" + it.why + "</p><div class='formula'>" + it.f(m) + "</div>";
+      det.hidden = false;
+    } else { det.hidden = true; }
+  }
+  $("fx").addEventListener("input", drawPack);
+
+  // ---- Шаг 5: раньше и сейчас ----
+  function drawBeforeAfter() {
+    var before = model(12000, 202000), now = BASE;
+    var D = 202000;
+    function bar(label, m) {
+      return '<div class="hbar"><span>' + label + '</span><div class="htrack">' +
+        '<div class="hseg" style="width:' + (m.total / D * 100) + '%;background:var(--sum)"></div>' +
+        '<div class="hseg" style="width:' + (Math.max(m.margin, 0) / D * 100) + '%;background:var(--ink)"></div></div>' +
+        '<span class="hval">' + pct(m.marginPct) + '</span></div>';
+    }
+    $("before-after").innerHTML = bar("Раньше, цена ≈ 202 000", before) + bar("Сейчас, цена 150 000", now) +
+      '<p style="font-size:14px">Затраты почти одинаковые: <span class="num">' + fmt(before.total) + "</span> и <span class='num'>" + fmt(now.total) + "</span> сумов. Разница только в цене.</p>";
+  }
+
+  // ---- Шаг 6: два удара ----
+  function drawHits() {
+    var c = +$("cut").value / 100, mo = +$("months").value;
+    $("o-cut").textContent = "−" + Math.round(c * 100) + "%";
+    $("o-months").textContent = nf1.format(mo).replace(",0", "") + " мес.";
+    var newPrice = PRICE * (1 - c);
+    var m = model(12000, newPrice);
+    var annual = m.margin * VOLUME;
+    var packs = VOLUME * mo / 12;
+    var loss = packs * PRICE * c;
+    var times = loss / PROFIT_NOW;
+    $("hit-kpis").innerHTML =
+      kpi("Новый потолок", fmt(newPrice), "было 150 000") +
+      kpi("Удар 1: маржа дальше", pct(m.marginPct), "за год " + bn(annual), m.margin < 0 ? "bad" : "") +
+      kpi("На складе в день пересмотра", fmt(packs) + " уп.", "уже оплачены по старым условиям") +
+      kpi("Удар 2: убыток на складе", bn(loss), c > 0 ? "≈ " + nf1.format(times) + " годовых прибыли" : "снижения нет", loss > 0 ? "bad" : "");
+  }
+  ["cut", "months"].forEach(function (id) { $(id).addEventListener("input", drawHits); });
+
+  // ---- Шаг 7: ловушка ----
+  var bindCip = false;
+  function drawTrap() {
+    var d = +$("disc").value / 100;
+    $("o-disc").textContent = Math.round(d * 100) + "%";
+    var after = model(12000, PRICE, PURCHASE_USD * (1 - d));
+    var cipOld = BASE.purchase + BASE.delivery;
+    var cipNew = after.purchase + after.delivery;
+    var nextPrice = bindCip ? PRICE * cipNew / cipOld : PRICE;
+    var next = model(12000, nextPrice, PURCHASE_USD * (1 - d));
+    $("trap-kpis").innerHTML =
+      kpi("Сейчас", pct(BASE.marginPct), "без скидки") +
+      kpi("Со скидкой, до пересмотра", pct(after.marginPct), "+" + nf1.format((after.marginPct - BASE.marginPct) * 100) + " п.п.", "good") +
+      kpi("После пересмотра", pct(next.marginPct), "потолок " + fmt(nextPrice), next.marginPct > BASE.marginPct + 0.005 ? "good" : "bad");
+    $("trap-out").className = "verdict " + (bindCip ? "bad" : "good");
+    $("trap-out").textContent = bindCip
+      ? "Таможенная цена упала, и при пересмотре потолок опустился вслед за ней. Выгода от скидки почти вся ушла государству."
+      : "Потолок определяют цены в других странах, ваша скидка на него не влияет. Выгода остаётся у импортёра.";
+    $("bind-ref").setAttribute("aria-pressed", String(!bindCip));
+    $("bind-cip").setAttribute("aria-pressed", String(bindCip));
+  }
+  $("disc").addEventListener("input", drawTrap);
+  $("bind-ref").addEventListener("click", function () { bindCip = false; drawTrap(); });
+  $("bind-cip").addEventListener("click", function () { bindCip = true; drawTrap(); });
+
+  // ---- Шаг 9: решение ----
+  function drawDecision() {
+    var p = +$("p").value / 100, c = +$("cut2").value / 100, prep = +$("prep").value * 1e9;
+    $("o-p").textContent = Math.round(p * 100) + "%";
+    $("o-cut2").textContent = "−" + Math.round(c * 100) + "%";
+    $("o-prep").textContent = nf2.format(prep / 1e9);
+    var big = 50000, small = 18750;
+    var lossNothing = p * c * PRICE * big;
+    var lossPrep = p * c * PRICE * small + prep;
+    var threshold = prep / (c * PRICE * (big - small));
+    var D = Math.max(lossNothing, lossPrep, 1);
+    function bar(label, v, best) {
+      return '<div class="hbar"><span>' + label + '</span><div class="htrack"><div class="hseg" style="width:' + (v / D * 100) + '%;background:' + (best ? "var(--gain)" : "var(--loss)") + '"></div></div><span class="hval">' + bn(v) + '</span></div>';
+    }
+    var prepBetter = lossPrep < lossNothing;
+    $("dec-bars").innerHTML = bar("Ничего не менять", lossNothing, !prepBetter) + bar("Подготовиться", lossPrep, prepBetter);
+    $("dec-out").className = "verdict " + (prepBetter ? "good" : "");
+    var th = threshold >= 1 ? "больше 100%" : Math.round(threshold * 100) + "%";
+    $("dec-out").innerHTML = (prepBetter
+      ? "<b>Готовимся:</b> дробим поставки до пересмотра, экономия ≈ " + bn(lossNothing - lossPrep) + "."
+      : "<b>Ничего не меняем:</b> подготовка стоит дороже ожидаемого убытка.") +
+      " Подготовка окупается, когда вероятность снижения выше <b class='num'>" + th + "</b>.";
+  }
+  ["p", "cut2", "prep"].forEach(function (id) { $(id).addEventListener("input", drawDecision); });
+
+  drawCeil(); drawPack(); drawBeforeAfter(); drawHits(); drawTrap(); drawDecision();
+  if (typeof window !== "undefined") { window.__pack = { model: model, breakevenFx: breakevenFx }; }
+})();
+</script>

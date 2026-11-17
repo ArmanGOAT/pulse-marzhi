@@ -1,0 +1,608 @@
+{
+  "metric": "auc",
+  "best_params": {
+    "woe_logit": {
+      "n_bins": 8,
+      "smoothing": 0.5,
+      "min_share": 0.01,
+      "C": 0.5
+    },
+    "catboost": {
+      "iterations": 400,
+      "depth": 4,
+      "learning_rate": 0.03,
+      "l2_leaf_reg": 3,
+      "calibration_folds": 3
+    }
+  },
+  "trials": {
+    "woe_logit": [
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.5
+        },
+        "val_auc": 0.7149,
+        "val_brier": 0.124,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.5
+        },
+        "val_auc": 0.7147,
+        "val_brier": 0.124,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 1.0
+        },
+        "val_auc": 0.7132,
+        "val_brier": 0.1243,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 1.0
+        },
+        "val_auc": 0.7131,
+        "val_brier": 0.1243,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 5.0
+        },
+        "val_auc": 0.7129,
+        "val_brier": 0.1244,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 5.0
+        },
+        "val_auc": 0.7126,
+        "val_brier": 0.1244,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.1
+        },
+        "val_auc": 0.7121,
+        "val_brier": 0.1244,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.1
+        },
+        "val_auc": 0.7118,
+        "val_brier": 0.1245,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.05
+        },
+        "val_auc": 0.71,
+        "val_brier": 0.1247,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 5.0
+        },
+        "val_auc": 0.7097,
+        "val_brier": 0.1249,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 8,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.05
+        },
+        "val_auc": 0.7096,
+        "val_brier": 0.1248,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 1.0
+        },
+        "val_auc": 0.7094,
+        "val_brier": 0.125,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 5.0
+        },
+        "val_auc": 0.709,
+        "val_brier": 0.1248,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 1.0
+        },
+        "val_auc": 0.709,
+        "val_brier": 0.125,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.5
+        },
+        "val_auc": 0.7089,
+        "val_brier": 0.1248,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 1.0
+        },
+        "val_auc": 0.7088,
+        "val_brier": 0.1249,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 1.0
+        },
+        "val_auc": 0.7088,
+        "val_brier": 0.1248,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.5
+        },
+        "val_auc": 0.7087,
+        "val_brier": 0.1249,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.5
+        },
+        "val_auc": 0.7086,
+        "val_brier": 0.1251,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 5.0
+        },
+        "val_auc": 0.7084,
+        "val_brier": 0.1249,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 5.0
+        },
+        "val_auc": 0.7084,
+        "val_brier": 0.1252,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.5
+        },
+        "val_auc": 0.7081,
+        "val_brier": 0.1252,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.1
+        },
+        "val_auc": 0.7074,
+        "val_brier": 0.1251,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.1
+        },
+        "val_auc": 0.7068,
+        "val_brier": 0.1252,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.1
+        },
+        "val_auc": 0.7062,
+        "val_brier": 0.1255,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.05
+        },
+        "val_auc": 0.7061,
+        "val_brier": 0.1254,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.5
+        },
+        "val_auc": 0.7061,
+        "val_brier": 0.1257,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 1.0
+        },
+        "val_auc": 0.706,
+        "val_brier": 0.1257,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.05
+        },
+        "val_auc": 0.7058,
+        "val_brier": 0.1254,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.1
+        },
+        "val_auc": 0.7058,
+        "val_brier": 0.1256,
+        "seconds": 0.7
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 5.0
+        },
+        "val_auc": 0.7058,
+        "val_brier": 0.1258,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.05
+        },
+        "val_auc": 0.7058,
+        "val_brier": 0.1255,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.1
+        },
+        "val_auc": 0.7058,
+        "val_brier": 0.1256,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 5.0
+        },
+        "val_auc": 0.7058,
+        "val_brier": 0.1257,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.5
+        },
+        "val_auc": 0.7057,
+        "val_brier": 0.1257,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 10,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 1.0
+        },
+        "val_auc": 0.7057,
+        "val_brier": 0.1257,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 4,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.05
+        },
+        "val_auc": 0.7052,
+        "val_brier": 0.1254,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.1
+        },
+        "val_auc": 0.7049,
+        "val_brier": 0.1257,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.005,
+          "C": 0.05
+        },
+        "val_auc": 0.7044,
+        "val_brier": 0.1257,
+        "seconds": 0.6
+      },
+      {
+        "model": "woe_logit",
+        "params": {
+          "n_bins": 6,
+          "smoothing": 0.5,
+          "min_share": 0.01,
+          "C": 0.05
+        },
+        "val_auc": 0.7038,
+        "val_brier": 0.1258,
+        "seconds": 0.6
+      }
+    ],
+    "catboost": [
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 4,
+          "learning_rate": 0.03,
+          "l2_leaf_reg": 3,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.6592,
+        "val_brier": 0.1294,
+        "seconds": 1.8
+      },
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 4,
+          "learning_rate": 0.03,
+          "l2_leaf_reg": 10,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.6579,
+        "val_brier": 0.1298,
+        "seconds": 1.7
+      },
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 6,
+          "learning_rate": 0.03,
+          "l2_leaf_reg": 3,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.6501,
+        "val_brier": 0.1316,
+        "seconds": 2.2
+      },
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 6,
+          "learning_rate": 0.03,
+          "l2_leaf_reg": 10,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.6467,
+        "val_brier": 0.1319,
+        "seconds": 2.2
+      },
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 6,
+          "learning_rate": 0.1,
+          "l2_leaf_reg": 3,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.6274,
+        "val_brier": 0.1389,
+        "seconds": 2.3
+      },
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 4,
+          "learning_rate": 0.1,
+          "l2_leaf_reg": 3,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.627,
+        "val_brier": 0.1454,
+        "seconds": 1.8
+      },
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 6,
+          "learning_rate": 0.1,
+          "l2_leaf_reg": 10,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.6261,
+        "val_brier": 0.1412,
+        "seconds": 2.3
+      },
+      {
+        "model": "catboost",
+        "params": {
+          "iterations": 400,
+          "depth": 4,
+          "learning_rate": 0.1,
+          "l2_leaf_reg": 10,
+          "calibration_folds": 3
+        },
+        "val_auc": 0.626,
+        "val_brier": 0.1393,
+        "seconds": 1.8
+      }
+    ]
+  }
+}

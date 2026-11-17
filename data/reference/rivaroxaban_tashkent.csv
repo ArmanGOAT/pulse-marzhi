@@ -1,0 +1,9 @@
+drug_id,trade_name,inn,atc,strength,pack_size,manufacturer,country,is_local,is_original,pharmacy_min_uzs,pharmacy_max_uzs,status,source
+RIV-XALIA,Ксалиа,rivaroxaban,B01AF01,20 mg,28,CCL Pharmaceuticals,PK,false,false,137000,161000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"
+RIV-VOXABAN,Воксабан,rivaroxaban,B01AF01,20 mg,28,Nobel-Pharmsanoat,UZ,true,false,167000,170000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"
+RIV-RAXABAN,Раксабан,rivaroxaban,B01AF01,20 mg,28,Synokem,IN,false,false,157000,192000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"
+RIV-RIVAXAGEN,Риваксажен,rivaroxaban,B01AF01,20 mg,28,Novugen Pharma,UZ,true,false,181000,215000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"
+RIV-SERBAN,Сербан-20,rivaroxaban,B01AF01,20 mg,28,Exemed,IN,false,false,198000,208000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"
+RIV-EVOXIR,Эвоксир,rivaroxaban,B01AF01,20 mg,28,Галеника,RS,false,false,234000,234000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"
+RIV-CARDATUXAN,Кардатуксан,rivaroxaban,B01AF01,20 mg,28,Gedeon Richter,HU,false,false,256000,256000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"
+RIV-RIVAROX,Риварокс,rivaroxaban,B01AF01,20 mg,28,Combino Pharm,MT,false,false,242000,289000,fact,"liki.uz, аптеки Ташкента, 2026-11-17 (из разбора команды)"

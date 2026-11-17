@@ -1,0 +1,53 @@
+# Все входные цифры модели с происхождением (принципы ALCOA+: кто, откуда, когда).
+# status: fact — условие задачи, закон, открытый источник; estimate — допущение команды; demo — синтетика.
+# Единицы: валюты по ISO 4217 (UZS, USD), даты по ISO 8601.
+version: 1
+as_of: 2026-11-17
+
+market:
+  price_ceiling:      {value: 150000, unit: UZS/pack, status: fact, source: "Условие задачи №16"}
+  annual_volume:      {value: 150000, unit: pack/year, status: fact, source: "Условие задачи №16"}
+  fx_usd_uzs:         {value: 12000, unit: UZS/USD, status: estimate, source: "Курс ЦБ янв–июн 2026: 11 935–12 320 (spot.uz, 25.07.2026)"}
+  duty_rate:          {value: 0.02, unit: share, status: fact, source: "Пошлина 2% с 01.04.2025 (kun.uz)"}
+  wholesale_markup:   {value: 0.15, unit: share, status: fact, source: "УП-13, наценка опта до 15% (buxgalter.uz)"}
+  retail_markup:      {value: 0.20, unit: share, status: fact, source: "УП-13, наценка аптеки до 20% (buxgalter.uz)"}
+
+costs:
+  purchase_usd:            {value: 9.05, unit: USD/pack, status: estimate, source: "Подобрано под маржу 2,2% из условия"}
+  delivery_usd_air:        {value: 0.75, unit: USD/pack, status: estimate, source: "Допущение команды"}
+  delivery_usd_auto:       {value: 0.40, unit: USD/pack, status: estimate, source: "Допущение команды"}
+  delivery_usd_rail:       {value: 0.28, unit: USD/pack, status: estimate, source: "Допущение команды"}
+  transit_months_air:      {value: 0.2, unit: month, status: estimate, source: "Допущение команды"}
+  transit_months_auto:     {value: 0.5, unit: month, status: estimate, source: "Допущение команды"}
+  transit_months_rail:     {value: 0.9, unit: month, status: estimate, source: "Допущение команды"}
+  delay_buffer_months_rail: {value: 0.25, unit: month, status: estimate, source: "Доп. запас на задержки на границе"}
+  clearance_per_shipment:  {value: 45000000, unit: UZS/shipment, status: estimate, source: "Допущение команды"}
+  money_rate:              {value: 0.22, unit: share/year, status: estimate, source: "Стоимость денег, допущение"}
+  storage_rate:            {value: 0.04, unit: share/year, status: estimate, source: "Хранение, допущение"}
+  supplier_credit_months:  {value: 1.0, unit: month, status: estimate, source: "Оплата производителю через 30 дней"}
+  pharmacy_deferral_days:  {value: 45, unit: day, status: estimate, source: "Отсрочка аптекам, допущение"}
+  writeoff_per_batch_month: {value: 0.0015, unit: share/month, status: estimate, source: "Списания 0,9% при партии на 6 мес."}
+  safety_stock_min_months: {value: 1.0, unit: month, status: fact, source: "Жёсткое правило системы: запас не меньше месяца"}
+  regional_delivery:       {value: 3600, unit: UZS/pack, status: estimate, source: "Допущение команды"}
+  marketing_annual:        {value: 1500000000, unit: UZS/year, status: estimate, source: "Допущение команды"}
+  digital_cost_saving:     {value: 0.60, unit: share, status: estimate, source: "Цифровой контакт дешевле визита на 60%"}
+  digital_sales_loss_full: {value: 0.12, unit: share, status: estimate, source: "−12% продаж при 100% цифры"}
+  regulatory_annual:       {value: 525000000, unit: UZS/year, status: estimate, source: "Регистрация и фармаконадзор"}
+  base_shipments:          {value: 2, unit: shipment/year, status: estimate, source: "Сейчас 2 поставки в год"}
+  amort_years:             {value: 8, unit: year, status: estimate, source: "Срок списания вложений"}
+  cut_pass_through:        {value: 1.0, unit: share, status: estimate, source: "Доля снижения потолка, на которую производитель снижает цену закупки для новых партий; товар на складе уже куплен по старой цене"}
+  prep_window_days:        {value: 120, unit: day, status: estimate, source: "Самое раннее, за сколько дней до пересмотра переходим на мелкие партии"}
+  prep_batch_months:       {value: 1.0, unit: month, status: estimate, source: "Размер мелкой партии в окне подготовки"}
+  invest_rate:             {value: 0.07, unit: share/year, status: fact, source: "Льготный кредит под локализацию 7% (anhor.uz)"}
+
+risk:
+  fx_drift:        {value: 0.012, unit: share/year, status: estimate, source: "Средний рост курса за год по 47 месяцам ЦБ 2023–2026 (cbu.uz); в ТЗ было +3%"}
+  fx_sd:           {value: 0.063, unit: share/year, status: estimate, source: "Разброс годового изменения курса по 47 месяцам ЦБ 2023–2026 (cbu.uz); в ТЗ было 8%"}
+  demand_sd:       {value: 0.12, unit: share, status: estimate, source: "Разброс спроса"}
+  delivery_sd:     {value: 0.20, unit: share, status: estimate, source: "Разброс стоимости доставки"}
+  cut_min:         {value: 0.05, unit: share, status: estimate, source: "Новое снижение потолка от 5%"}
+  cut_max:         {value: 0.15, unit: share, status: estimate, source: "Новое снижение потолка до 15%"}
+  cut_prob_default: {value: 0.25, unit: probability, status: estimate, source: "До готовности радара"}
+  n_scenarios:     {value: 2000, unit: count, status: estimate, source: "Число вариантов года в Монте-Карло"}
+  max_loss_prob:   {value: 0.10, unit: probability, status: fact, source: "Жёсткое правило системы: убыток не выше 10%"}
+  patients_estimate: {value: 11500, unit: person, status: estimate, source: "150 000 уп. × 28 таб. / 365 дней"}

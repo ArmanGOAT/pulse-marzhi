@@ -1,0 +1,264 @@
+{
+  "B: июль 2026": {
+    "role": "подбор, оптимистично",
+    "segments": [
+      {
+        "segment": "Все рецептурные",
+        "n": 13463,
+        "positives": 2126,
+        "cut_share": 0.158,
+        "auc_model": 0.715,
+        "auc_ci95": [
+          0.703,
+          0.725
+        ],
+        "auc_rule": 0.6,
+        "value_model_mln": 109.8,
+        "value_always_mln": 95.1
+      },
+      {
+        "segment": "Импортные",
+        "n": 8164,
+        "positives": 1751,
+        "cut_share": 0.214,
+        "auc_model": 0.652,
+        "auc_ci95": [
+          0.638,
+          0.667
+        ],
+        "auc_rule": 0.611,
+        "value_model_mln": 180.1,
+        "value_always_mln": 180.3
+      },
+      {
+        "segment": "Местные",
+        "n": 5299,
+        "positives": 375,
+        "cut_share": 0.071,
+        "auc_model": 0.691,
+        "auc_ci95": [
+          0.663,
+          0.713
+        ],
+        "auc_rule": 0.601,
+        "value_model_mln": 1.6,
+        "value_always_mln": -36.1
+      },
+      {
+        "segment": "Таблетки и капсулы",
+        "n": 5169,
+        "positives": 885,
+        "cut_share": 0.171,
+        "auc_model": 0.695,
+        "auc_ci95": [
+          0.676,
+          0.711
+        ],
+        "auc_rule": 0.616,
+        "value_model_mln": 127.3,
+        "value_always_mln": 114.1
+      },
+      {
+        "segment": "Инъекции",
+        "n": 6435,
+        "positives": 936,
+        "cut_share": 0.145,
+        "auc_model": 0.739,
+        "auc_ci95": [
+          0.725,
+          0.755
+        ],
+        "auc_rule": 0.592,
+        "value_model_mln": 95.2,
+        "value_always_mln": 77.6
+      },
+      {
+        "segment": "Кардио (ATC B01 и C)",
+        "n": 1410,
+        "positives": 298,
+        "cut_share": 0.211,
+        "auc_model": 0.633,
+        "auc_ci95": [
+          0.599,
+          0.672
+        ],
+        "auc_rule": 0.638,
+        "value_model_mln": 118.4,
+        "value_always_mln": 140.5
+      },
+      {
+        "segment": "Кардио, импортные",
+        "n": 1088,
+        "positives": 235,
+        "cut_share": 0.216,
+        "auc_model": 0.671,
+        "auc_ci95": [
+          0.628,
+          0.709
+        ],
+        "auc_rule": 0.63,
+        "value_model_mln": 148.3,
+        "value_always_mln": 147.4
+      },
+      {
+        "segment": "Аналогам уже снижали цену",
+        "n": 6758,
+        "positives": 1059,
+        "cut_share": 0.157,
+        "auc_model": 0.698,
+        "auc_ci95": [
+          0.681,
+          0.715
+        ],
+        "auc_rule": 0.644,
+        "value_model_mln": 99.4,
+        "value_always_mln": 95.7
+      },
+      {
+        "segment": "Аналогам ещё не снижали",
+        "n": 6705,
+        "positives": 1067,
+        "cut_share": 0.159,
+        "auc_model": 0.729,
+        "auc_ci95": [
+          0.714,
+          0.745
+        ],
+        "auc_rule": 0.557,
+        "value_model_mln": 120.4,
+        "value_always_mln": 94.5
+      }
+    ]
+  },
+  "C: ноябрь 2026": {
+    "role": "честный тест",
+    "segments": [
+      {
+        "segment": "Все рецептурные",
+        "n": 12213,
+        "positives": 1670,
+        "cut_share": 0.137,
+        "auc_model": 0.681,
+        "auc_ci95": [
+          0.669,
+          0.694
+        ],
+        "auc_rule": 0.632,
+        "value_model_mln": 63.3,
+        "value_always_mln": 38.1
+      },
+      {
+        "segment": "Импортные",
+        "n": 6939,
+        "positives": 699,
+        "cut_share": 0.101,
+        "auc_model": 0.764,
+        "auc_ci95": [
+          0.747,
+          0.782
+        ],
+        "auc_rule": 0.641,
+        "value_model_mln": 61.1,
+        "value_always_mln": 18.1
+      },
+      {
+        "segment": "Местные",
+        "n": 5274,
+        "positives": 971,
+        "cut_share": 0.184,
+        "auc_model": 0.703,
+        "auc_ci95": [
+          0.687,
+          0.72
+        ],
+        "auc_rule": 0.617,
+        "value_model_mln": 66.1,
+        "value_always_mln": 64.5
+      },
+      {
+        "segment": "Таблетки и капсулы",
+        "n": 4337,
+        "positives": 331,
+        "cut_share": 0.076,
+        "auc_model": 0.781,
+        "auc_ci95": [
+          0.76,
+          0.806
+        ],
+        "auc_rule": 0.642,
+        "value_model_mln": 23.5,
+        "value_always_mln": -35.2
+      },
+      {
+        "segment": "Инъекции",
+        "n": 6271,
+        "positives": 1188,
+        "cut_share": 0.189,
+        "auc_model": 0.684,
+        "auc_ci95": [
+          0.67,
+          0.7
+        ],
+        "auc_rule": 0.648,
+        "value_model_mln": 99.4,
+        "value_always_mln": 100.7
+      },
+      {
+        "segment": "Кардио (ATC B01 и C)",
+        "n": 1239,
+        "positives": 111,
+        "cut_share": 0.09,
+        "auc_model": 0.743,
+        "auc_ci95": [
+          0.705,
+          0.787
+        ],
+        "auc_rule": 0.64,
+        "value_model_mln": 29.5,
+        "value_always_mln": -21.8
+      },
+      {
+        "segment": "Кардио, импортные",
+        "n": 958,
+        "positives": 70,
+        "cut_share": 0.073,
+        "auc_model": 0.797,
+        "auc_ci95": [
+          0.744,
+          0.841
+        ],
+        "auc_rule": 0.653,
+        "value_model_mln": 21.2,
+        "value_always_mln": -39.1
+      },
+      {
+        "segment": "Аналогам уже снижали цену",
+        "n": 8015,
+        "positives": 892,
+        "cut_share": 0.111,
+        "auc_model": 0.777,
+        "auc_ci95": [
+          0.765,
+          0.791
+        ],
+        "auc_rule": 0.698,
+        "value_model_mln": 70.3,
+        "value_always_mln": 15.5
+      },
+      {
+        "segment": "Аналогам ещё не снижали",
+        "n": 4198,
+        "positives": 778,
+        "cut_share": 0.185,
+        "auc_model": 0.484,
+        "auc_ci95": [
+          0.462,
+          0.504
+        ],
+        "auc_rule": 0.575,
+        "value_model_mln": 50.0,
+        "value_always_mln": 81.4
+      }
+    ]
+  }
+}

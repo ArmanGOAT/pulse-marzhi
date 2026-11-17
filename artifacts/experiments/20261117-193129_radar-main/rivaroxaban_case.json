@@ -1,0 +1,537 @@
+{
+  "B: июль 2026": {
+    "trained_on": [
+      "A: декабрь 2025 – январь 2026"
+    ],
+    "brands": [
+      {
+        "trademark": "Рунаплакс®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 40.0,
+        "p_cut": 0.728,
+        "rank_in_wave_pct": 0.0,
+        "actual_cut": true,
+        "cut_size": 0.239
+      },
+      {
+        "trademark": "КСАРЕЛТО®",
+        "local": false,
+        "currency": "EUR",
+        "base_price": 31.39,
+        "p_cut": 0.681,
+        "rank_in_wave_pct": 0.001,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Ксилтесс",
+        "local": false,
+        "currency": "USD",
+        "base_price": 21.57,
+        "p_cut": 0.486,
+        "rank_in_wave_pct": 0.015,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Лекарокс",
+        "local": false,
+        "currency": "USD",
+        "base_price": 22.0,
+        "p_cut": 0.385,
+        "rank_in_wave_pct": 0.059,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "КСАВИТОР",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.0,
+        "p_cut": 0.38,
+        "rank_in_wave_pct": 0.062,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Сербан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 14.5,
+        "p_cut": 0.37,
+        "rank_in_wave_pct": 0.068,
+        "actual_cut": true,
+        "cut_size": 0.138
+      },
+      {
+        "trademark": "КСАВИТОР",
+        "local": false,
+        "currency": "USD",
+        "base_price": 18.0,
+        "p_cut": 0.363,
+        "rank_in_wave_pct": 0.075,
+        "actual_cut": true,
+        "cut_size": 0.274
+      },
+      {
+        "trademark": "Рироксатор",
+        "local": false,
+        "currency": "USD",
+        "base_price": 18.0,
+        "p_cut": 0.359,
+        "rank_in_wave_pct": 0.079,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Розаря",
+        "local": false,
+        "currency": "USD",
+        "base_price": 17.4,
+        "p_cut": 0.308,
+        "rank_in_wave_pct": 0.125,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Раксабан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 12.0,
+        "p_cut": 0.3,
+        "rank_in_wave_pct": 0.133,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Риваксоред®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 13.51,
+        "p_cut": 0.267,
+        "rank_in_wave_pct": 0.174,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "ЭВОКСИР®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 12.9,
+        "p_cut": 0.231,
+        "rank_in_wave_pct": 0.235,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Фароксабан",
+        "local": false,
+        "currency": "EUR",
+        "base_price": 11.0,
+        "p_cut": 0.225,
+        "rank_in_wave_pct": 0.247,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Беликсон",
+        "local": false,
+        "currency": "USD",
+        "base_price": 11.5,
+        "p_cut": 0.221,
+        "rank_in_wave_pct": 0.254,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Риварокс",
+        "local": false,
+        "currency": "USD",
+        "base_price": 15.5,
+        "p_cut": 0.186,
+        "rank_in_wave_pct": 0.327,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Кардатуксан®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 15.66,
+        "p_cut": 0.159,
+        "rank_in_wave_pct": 0.391,
+        "actual_cut": true,
+        "cut_size": 0.138
+      },
+      {
+        "trademark": "Оксикон",
+        "local": false,
+        "currency": "USD",
+        "base_price": 7.36,
+        "p_cut": 0.153,
+        "rank_in_wave_pct": 0.404,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Ксарива",
+        "local": false,
+        "currency": "USD",
+        "base_price": 7.36,
+        "p_cut": 0.129,
+        "rank_in_wave_pct": 0.46,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Эксепт",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.0,
+        "p_cut": 0.12,
+        "rank_in_wave_pct": 0.484,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Рибаксан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 7.36,
+        "p_cut": 0.11,
+        "rank_in_wave_pct": 0.509,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "КСАЛИА",
+        "local": false,
+        "currency": "USD",
+        "base_price": 11.26,
+        "p_cut": 0.094,
+        "rank_in_wave_pct": 0.543,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Ксаробан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.2,
+        "p_cut": 0.052,
+        "rank_in_wave_pct": 0.643,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "КСАБАНРИВ",
+        "local": true,
+        "currency": "UZS",
+        "base_price": 250000.0,
+        "p_cut": 0.047,
+        "rank_in_wave_pct": 0.66,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Риваксажен",
+        "local": true,
+        "currency": "UZS",
+        "base_price": 300000.0,
+        "p_cut": 0.046,
+        "rank_in_wave_pct": 0.665,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "РИВАКСО",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.0,
+        "p_cut": 0.043,
+        "rank_in_wave_pct": 0.677,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "ВОКСАБАН",
+        "local": true,
+        "currency": "UZS",
+        "base_price": 285670.0,
+        "p_cut": 0.041,
+        "rank_in_wave_pct": 0.692,
+        "actual_cut": false,
+        "cut_size": 0.0
+      }
+    ]
+  },
+  "C: ноябрь 2026": {
+    "trained_on": [
+      "A: декабрь 2025 – январь 2026",
+      "B: июль 2026"
+    ],
+    "brands": [
+      {
+        "trademark": "Лекарокс",
+        "local": false,
+        "currency": "USD",
+        "base_price": 22.0,
+        "p_cut": 0.624,
+        "rank_in_wave_pct": 0.001,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "КСАВИТОР",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.0,
+        "p_cut": 0.599,
+        "rank_in_wave_pct": 0.002,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Ксилтесс",
+        "local": false,
+        "currency": "USD",
+        "base_price": 21.57,
+        "p_cut": 0.593,
+        "rank_in_wave_pct": 0.002,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Рироксатор",
+        "local": false,
+        "currency": "USD",
+        "base_price": 18.0,
+        "p_cut": 0.575,
+        "rank_in_wave_pct": 0.003,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Риварокс",
+        "local": false,
+        "currency": "USD",
+        "base_price": 15.5,
+        "p_cut": 0.406,
+        "rank_in_wave_pct": 0.037,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Эксепт",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.0,
+        "p_cut": 0.399,
+        "rank_in_wave_pct": 0.04,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Раксабан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 12.0,
+        "p_cut": 0.383,
+        "rank_in_wave_pct": 0.047,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Фароксабан",
+        "local": false,
+        "currency": "EUR",
+        "base_price": 11.0,
+        "p_cut": 0.286,
+        "rank_in_wave_pct": 0.101,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "КСАЛИА",
+        "local": false,
+        "currency": "USD",
+        "base_price": 11.26,
+        "p_cut": 0.279,
+        "rank_in_wave_pct": 0.108,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Беликсон",
+        "local": false,
+        "currency": "USD",
+        "base_price": 11.5,
+        "p_cut": 0.242,
+        "rank_in_wave_pct": 0.143,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Риваксажен",
+        "local": true,
+        "currency": "UZS",
+        "base_price": 300000.0,
+        "p_cut": 0.232,
+        "rank_in_wave_pct": 0.154,
+        "actual_cut": false,
+        "cut_size": 0.086
+      },
+      {
+        "trademark": "ВОКСАБАН",
+        "local": true,
+        "currency": "UZS",
+        "base_price": 285670.0,
+        "p_cut": 0.21,
+        "rank_in_wave_pct": 0.178,
+        "actual_cut": true,
+        "cut_size": 0.104
+      },
+      {
+        "trademark": "КСАБАНРИВ",
+        "local": true,
+        "currency": "UZS",
+        "base_price": 250000.0,
+        "p_cut": 0.207,
+        "rank_in_wave_pct": 0.181,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Рибаксан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 7.36,
+        "p_cut": 0.196,
+        "rank_in_wave_pct": 0.196,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "РИВАКСО",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.0,
+        "p_cut": 0.172,
+        "rank_in_wave_pct": 0.23,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Рунаплакс®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 30.43,
+        "p_cut": 0.17,
+        "rank_in_wave_pct": 0.234,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Оксикон",
+        "local": false,
+        "currency": "USD",
+        "base_price": 7.36,
+        "p_cut": 0.168,
+        "rank_in_wave_pct": 0.236,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Ксаробан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 10.2,
+        "p_cut": 0.154,
+        "rank_in_wave_pct": 0.258,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "КСАРЕЛТО®",
+        "local": false,
+        "currency": "EUR",
+        "base_price": 31.39,
+        "p_cut": 0.132,
+        "rank_in_wave_pct": 0.296,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Ксарива",
+        "local": false,
+        "currency": "USD",
+        "base_price": 7.36,
+        "p_cut": 0.123,
+        "rank_in_wave_pct": 0.311,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Розаря",
+        "local": false,
+        "currency": "USD",
+        "base_price": 17.4,
+        "p_cut": 0.044,
+        "rank_in_wave_pct": 0.578,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "ЭВОКСИР®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 12.9,
+        "p_cut": 0.035,
+        "rank_in_wave_pct": 0.633,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Сербан",
+        "local": false,
+        "currency": "USD",
+        "base_price": 12.5,
+        "p_cut": 0.031,
+        "rank_in_wave_pct": 0.66,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "КСАВИТОР",
+        "local": false,
+        "currency": "USD",
+        "base_price": 13.06,
+        "p_cut": 0.031,
+        "rank_in_wave_pct": 0.66,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Риваксоред®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 13.51,
+        "p_cut": 0.029,
+        "rank_in_wave_pct": 0.674,
+        "actual_cut": false,
+        "cut_size": 0.0
+      },
+      {
+        "trademark": "Кардатуксан®",
+        "local": false,
+        "currency": "USD",
+        "base_price": 13.5,
+        "p_cut": 0.006,
+        "rank_in_wave_pct": 0.865,
+        "actual_cut": false,
+        "cut_size": 0.0
+      }
+    ]
+  }
+}

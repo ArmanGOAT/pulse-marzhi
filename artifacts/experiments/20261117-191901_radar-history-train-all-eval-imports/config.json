@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "seed": 42,
+  "label": {
+    "cut_threshold": 0.1
+  },
+  "waves": [
+    {
+      "name": "A: декабрь 2025 – январь 2026",
+      "asof": "2025-12-01",
+      "label_end": "2026-02-01"
+    },
+    {
+      "name": "B: июль 2026",
+      "asof": "2026-06-01",
+      "label_end": "2026-08-01"
+    },
+    {
+      "name": "C: ноябрь 2026",
+      "asof": "2026-10-01",
+      "label_end": "2026-11-17"
+    }
+  ],
+  "split": {
+    "tune_train": [
+      "A: декабрь 2025 – январь 2026"
+    ],
+    "validation": "B: июль 2026",
+    "test_train": [
+      "A: декабрь 2025 – январь 2026",
+      "B: июль 2026"
+    ],
+    "test": "C: ноябрь 2026"
+  },
+  "selection": {
+    "metric": "auc",
+    "candidates": [
+      "woe_logit",
+      "catboost"
+    ]
+  },
+  "feature_set": "history",
+  "scope": {
+    "train": "all",
+    "eval": "imports"
+  },
+  "models": {
+    "woe_logit": {
+      "defaults": {
+        "n_bins": 6,
+        "smoothing": 0.5,
+        "min_share": 0.01,
+        "C": 0.5
+      },
+      "search": {
+        "n_bins": [
+          4,
+          6,
+          8,
+          10
+        ],
+        "min_share": [
+          0.005,
+          0.01
+        ],
+        "C": [
+          0.05,
+          0.1,
+          0.5,
+          1.0,
+          5.0
+        ]
+      }
+    },
+    "catboost": {
+      "defaults": {
+        "iterations": 400,
+        "depth": 6,
+        "learning_rate": 0.05,
+        "l2_leaf_reg": 3,
+        "calibration_folds": 3
+      },
+      "search": {
+        "depth": [
+          4,
+          6
+        ],
+        "learning_rate": [
+          0.03,
+          0.1
+        ],
+        "l2_leaf_reg": [
+          3,
+          10
+        ]
+      }
+    }
+  }
+}

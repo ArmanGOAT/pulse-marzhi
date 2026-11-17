@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pulse-marzhi"
+version = "0.1.0"
+description = "Пульс маржи: прогноз пересмотров потолка цены и план мер для импортёра лекарств (задача №16)"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+authors = [{ name = "Команда Пульс маржи" }]
+dependencies = [
+    "numpy==2.0.2",
+    "pandas==3.0.3",
+    "pyarrow==21.0.0",
+    "scikit-learn==1.9.0",
+    "catboost==1.2.8",
+    "pydantic==2.11.7",
+    "PyYAML==6.0.2",
+    "fastapi==0.115.13",
+    "uvicorn==0.34.3",
+    "httpx==0.28.1",
+    "openpyxl==3.1.5",
+    "fpdf2==2.7.9",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==8.3.3", "ruff==0.6.9"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "SIM"]
+# E501: длина строк контролирует line-length; N803/N806: X — принятое в ML имя матрицы признаков
+ignore = ["E501", "N803", "N806"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"

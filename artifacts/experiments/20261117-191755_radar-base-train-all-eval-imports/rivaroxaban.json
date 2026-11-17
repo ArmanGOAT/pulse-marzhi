@@ -1,0 +1,423 @@
+{
+  "asof": "2026-11-17",
+  "threshold": 0.0933,
+  "expected_cut": 0.418,
+  "brands": [
+    {
+      "trademark": "Ксилтесс",
+      "manufacturer": "Egis Pharmaceuticals PLC Венгрия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 21.57,
+      "base_usd": 21.57,
+      "p_cut": 0.5209,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "$21.57 за упаковку",
+        "производитель: Венгрия",
+        "25 брендов с тем же МНН"
+      ]
+    },
+    {
+      "trademark": "Лекарокс",
+      "manufacturer": "СООО Лекфарм, Республика Беларусь",
+      "local": false,
+      "currency": "USD",
+      "base_price": 22.0,
+      "base_usd": 22.0,
+      "p_cut": 0.4724,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "$22.00 за упаковку",
+        "25 брендов с тем же МНН",
+        "цена в 1.5 раза выше медианы аналогов той же дозы"
+      ]
+    },
+    {
+      "trademark": "КСАВИТОР",
+      "manufacturer": "Agio Pharmaceuticals LTD Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 10.0,
+      "base_usd": 10.0,
+      "p_cut": 0.4723,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "цена в 1.5 раза выше медианы аналогов той же дозы"
+      ]
+    },
+    {
+      "trademark": "Рироксатор",
+      "manufacturer": "LTD Torrent Pharmaceuticals Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 18.0,
+      "base_usd": 18.0,
+      "p_cut": 0.4491,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "$18.00 за упаковку",
+        "25 брендов с тем же МНН",
+        "производитель: Индия"
+      ]
+    },
+    {
+      "trademark": "Эксепт",
+      "manufacturer": "Pvt. Ltd. PharmEvo Пакистан",
+      "local": false,
+      "currency": "USD",
+      "base_price": 10.0,
+      "base_usd": 10.0,
+      "p_cut": 0.4027,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "цена в 1.5 раза выше медианы аналогов той же дозы",
+        "в 2.9 раза дороже самого дешёвого аналога той же дозы"
+      ]
+    },
+    {
+      "trademark": "КСАБАНРИВ",
+      "manufacturer": "СП ООО Remedy Group Узбекистан",
+      "local": true,
+      "currency": "UZS",
+      "base_price": 250000.0,
+      "base_usd": 20.79,
+      "p_cut": 0.3195,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "$20.79 за упаковку",
+        "25 брендов с тем же МНН",
+        "19 мес. без изменения цены"
+      ]
+    },
+    {
+      "trademark": "Риварокс",
+      "manufacturer": "Combino Pharm Malta LTD Мальта",
+      "local": false,
+      "currency": "USD",
+      "base_price": 15.5,
+      "base_usd": 15.5,
+      "p_cut": 0.2916,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "цена в 1.1 раза выше медианы аналогов той же дозы",
+        "производитель: Другая"
+      ]
+    },
+    {
+      "trademark": "Раксабан",
+      "manufacturer": "LTD Synokem Pharmaceuticals Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 12.0,
+      "base_usd": 12.0,
+      "p_cut": 0.2637,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "регистрации 4 лет"
+      ]
+    },
+    {
+      "trademark": "Беликсон",
+      "manufacturer": "Pvt. Ltd. M/S Biogenetic Drugs Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 11.5,
+      "base_usd": 11.5,
+      "p_cut": 0.2421,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "регистрации 3 лет"
+      ]
+    },
+    {
+      "trademark": "Фароксабан",
+      "manufacturer": "Vivimed Labs LTD Индия",
+      "local": false,
+      "currency": "EUR",
+      "base_price": 11.0,
+      "base_usd": 12.32,
+      "p_cut": 0.2195,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "$12.32 за упаковку"
+      ]
+    },
+    {
+      "trademark": "Риваксажен",
+      "manufacturer": "ИП ООО Novugen Pharma Узбекистан",
+      "local": true,
+      "currency": "UZS",
+      "base_price": 274307.86,
+      "base_usd": 22.81,
+      "p_cut": 0.2165,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "$22.81 за упаковку",
+        "25 брендов с тем же МНН",
+        "цена в 1.6 раза выше медианы аналогов той же дозы"
+      ]
+    },
+    {
+      "trademark": "КСАРЕЛТО®",
+      "manufacturer": "AG Bayer Германия",
+      "local": false,
+      "currency": "EUR",
+      "base_price": 31.39,
+      "base_usd": 35.14,
+      "p_cut": 0.21,
+      "prepare": true,
+      "prior_cut": true,
+      "reasons": [
+        "производитель: Германия",
+        "$35.14 за упаковку",
+        "в 5.1 раза дороже самого дешёвого аналога той же дозы"
+      ]
+    },
+    {
+      "trademark": "КСАЛИА",
+      "manufacturer": "Pvt. Ltd. CCL Pharmaceuticals Пакистан",
+      "local": false,
+      "currency": "USD",
+      "base_price": 11.26,
+      "base_usd": 11.26,
+      "p_cut": 0.2075,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "регистрации 4 лет",
+        "$11.26 за упаковку"
+      ]
+    },
+    {
+      "trademark": "Рунаплакс®",
+      "manufacturer": "GmbH Salutas Pharma Германия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 30.43,
+      "base_usd": 30.43,
+      "p_cut": 0.1788,
+      "prepare": true,
+      "prior_cut": true,
+      "reasons": [
+        "производитель: Германия",
+        "$30.43 за упаковку",
+        "цена в 2.1 раза выше аналогов, которым уже снизили цену"
+      ]
+    },
+    {
+      "trademark": "Оксикон",
+      "manufacturer": "LTD West-Coast Pharmaceutical Works Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 7.36,
+      "base_usd": 7.36,
+      "p_cut": 0.1469,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "$7.36 за упаковку"
+      ]
+    },
+    {
+      "trademark": "РИВАКСО",
+      "manufacturer": "Inc Davis Pharmaceutical Laboratories Пакистан",
+      "local": false,
+      "currency": "USD",
+      "base_price": 10.0,
+      "base_usd": 10.0,
+      "p_cut": 0.1395,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "$10.00 за упаковку",
+        "цену ещё не снижали"
+      ]
+    },
+    {
+      "trademark": "Ксаробан",
+      "manufacturer": "Co., Ltd. The Searle Пакистан",
+      "local": false,
+      "currency": "USD",
+      "base_price": 10.2,
+      "base_usd": 10.2,
+      "p_cut": 0.1294,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "$10.20 за упаковку",
+        "цену ещё не снижали"
+      ]
+    },
+    {
+      "trademark": "Розаря",
+      "manufacturer": "KRKA, d.d., Novo mesto' Словения",
+      "local": false,
+      "currency": "USD",
+      "base_price": 17.4,
+      "base_usd": 17.4,
+      "p_cut": 0.1287,
+      "prepare": true,
+      "prior_cut": true,
+      "reasons": [
+        "$17.40 за упаковку",
+        "25 брендов с тем же МНН",
+        "регистрации 3 лет"
+      ]
+    },
+    {
+      "trademark": "Рибаксан",
+      "manufacturer": "Jeil Pharmaceutical Co., Ltd. Республика Корея",
+      "local": false,
+      "currency": "USD",
+      "base_price": 7.36,
+      "base_usd": 7.36,
+      "p_cut": 0.1214,
+      "prepare": true,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "$7.36 за упаковку",
+        "регистрации 4 лет"
+      ]
+    },
+    {
+      "trademark": "Ксарива",
+      "manufacturer": "ООО АмантисМед Республика Беларусь",
+      "local": false,
+      "currency": "USD",
+      "base_price": 7.36,
+      "base_usd": 7.36,
+      "p_cut": 0.0932,
+      "prepare": false,
+      "prior_cut": false,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "$7.36 за упаковку",
+        "цену ещё не снижали"
+      ]
+    },
+    {
+      "trademark": "ЭВОКСИР®",
+      "manufacturer": "a.d GALENIKA A.D. BEOGRAD Сербия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 12.9,
+      "base_usd": 12.9,
+      "p_cut": 0.0556,
+      "prepare": false,
+      "prior_cut": true,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "регистрации 4 лет",
+        "производитель: Другая"
+      ]
+    },
+    {
+      "trademark": "ВОКСАБАН",
+      "manufacturer": "ИП ООО Nobel Pharmsanoat Узбекистан",
+      "local": true,
+      "currency": "UZS",
+      "base_price": 256012.59,
+      "base_usd": 21.29,
+      "p_cut": 0.0432,
+      "prepare": false,
+      "prior_cut": true,
+      "reasons": [
+        "$21.29 за упаковку",
+        "25 брендов с тем же МНН",
+        "цена в 1.6 раза выше медианы аналогов той же дозы"
+      ]
+    },
+    {
+      "trademark": "Сербан",
+      "manufacturer": "Exemed Pharmaceuticals Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 12.5,
+      "base_usd": 12.5,
+      "p_cut": 0.0427,
+      "prepare": false,
+      "prior_cut": true,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "регистрации 4 лет"
+      ]
+    },
+    {
+      "trademark": "КСАВИТОР",
+      "manufacturer": "Agio Pharmaceuticals LTD Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 13.06,
+      "base_usd": 13.06,
+      "p_cut": 0.0422,
+      "prepare": false,
+      "prior_cut": true,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "регистрации 4 лет"
+      ]
+    },
+    {
+      "trademark": "Риваксоред®",
+      "manufacturer": "Dr.Reddy's Laboratories LTD Индия",
+      "local": false,
+      "currency": "USD",
+      "base_price": 13.51,
+      "base_usd": 13.51,
+      "p_cut": 0.0347,
+      "prepare": false,
+      "prior_cut": true,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "производитель: Индия",
+        "$13.51 за упаковку"
+      ]
+    },
+    {
+      "trademark": "Кардатуксан®",
+      "manufacturer": "LTD Gedeon Richter Poland Польша",
+      "local": false,
+      "currency": "USD",
+      "base_price": 13.5,
+      "base_usd": 13.5,
+      "p_cut": 0.0164,
+      "prepare": false,
+      "prior_cut": true,
+      "reasons": [
+        "25 брендов с тем же МНН",
+        "$13.50 за упаковку",
+        "импортный препарат"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+# Рычаги из условия задачи №16 и их варианты. Все эффекты — допущения команды (status: estimate),
+# проверяются интервью с импортёром и запросами котировок (см. docs/STANDARDS.md, раздел данных).
+version: 1
+
+shipments_per_year: [1, 2, 3, 4, 6, 12]
+change_shipments_months: 2
+
+procurement:
+  current: {label: "Как сейчас", discount: 0.0, prepay: false, invest: 0, months: 0, enters_customs_value: false}
+  annual:  {label: "Годовой контракт со скидкой", discount: 0.05, prepay: true, invest: 20000000, months: 3, enters_customs_value: true}
+  joint:   {label: "Совместная закупка с другими импортёрами", discount: 0.07, prepay: false, invest: 100000000, months: 4, enters_customs_value: true}
+
+modes:
+  air:  {label: "Авиа", months: 1}
+  auto: {label: "Авто", months: 0}
+  rail: {label: "Ж/д + авто", months: 1}
+
+pooled:
+  "false": {label: "Груз отдельно", delivery_mult: 1.0, clearance_mult: 1.0, invest: 0, months: 0}
+  "true":  {label: "Груз вместе с другими импортёрами", delivery_mult: 0.70, clearance_mult: 0.50, invest: 50000000, months: 2}
+
+digital_shares: [0.0, 0.2, 0.4, 0.6, 0.8]
+digital_invest_full: 125000000
+digital_months_full: 5
+
+localization:
+  import:   {label: "Импорт готовой упаковки", save: 0.0, usd_share: 1.00, delivery_mult: 1.00, invest: 0, months: 0}
+  pack:     {label: "Вторичная упаковка в Узбекистане", save: 0.05, usd_share: 0.90, delivery_mult: 0.90, invest: 800000000, months: 8}
+  bulk:     {label: "Фасовка из таблеток без упаковки", save: 0.12, usd_share: 0.75, delivery_mult: 0.75, invest: 3000000000, months: 15}
+  contract: {label: "Контрактное производство на местном заводе", save: 0.30, usd_share: 0.40, delivery_mult: 0.30, invest: 9000000000, months: 24}
+
+current:
+  shipments: 2
+  procurement: current
+  mode: auto
+  pooled: false
+  digital: 0.0
+  loc: import

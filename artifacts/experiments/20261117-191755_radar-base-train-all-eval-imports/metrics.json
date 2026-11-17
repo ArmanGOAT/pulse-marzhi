@@ -1,0 +1,105 @@
+{
+  "economics": {
+    "gain_per_cut": 3461625000.0000005,
+    "prep_cost": 135000000.0
+  },
+  "champion": "woe_logit",
+  "selection_metric": "auc",
+  "validation": {
+    "wave": "B: июль 2026",
+    "train_waves": [
+      "A: декабрь 2025 – январь 2026"
+    ],
+    "threshold": 0.084,
+    "expected_cut": 0.4641,
+    "note": "на этой волне подбирали гиперпараметры и выбирали чемпиона: оценка оптимистична",
+    "models": {
+      "rule": {
+        "n": 8164,
+        "positives": 1751,
+        "base_rate": 0.2145,
+        "auc": 0.6105,
+        "brier": 0.1654,
+        "precision_top10": 0.3186,
+        "recall_at_threshold": 1.0,
+        "flagged_share": 1.0,
+        "value_per_drug_uzs": 180283938.0
+      },
+      "woe_logit": {
+        "n": 8164,
+        "positives": 1751,
+        "base_rate": 0.2145,
+        "auc": 0.6523,
+        "brier": 0.1614,
+        "precision_top10": 0.375,
+        "recall_at_threshold": 0.9663,
+        "flagged_share": 0.9234,
+        "value_per_drug_uzs": 180133929.0
+      },
+      "catboost": {
+        "n": 8164,
+        "positives": 1751,
+        "base_rate": 0.2145,
+        "auc": 0.5974,
+        "brier": 0.1691,
+        "precision_top10": 0.3039,
+        "recall_at_threshold": 0.8812,
+        "flagged_share": 0.8098,
+        "value_per_drug_uzs": 171083921.0
+      }
+    },
+    "strategies": {
+      "never_prepare": 0.0,
+      "always_prepare": 180283938.0
+    }
+  },
+  "test": {
+    "wave": "C: ноябрь 2026",
+    "train_waves": [
+      "A: декабрь 2025 – январь 2026",
+      "B: июль 2026"
+    ],
+    "threshold": 0.0885,
+    "expected_cut": 0.4405,
+    "note": "честная оценка: волну не трогали до этого шага",
+    "models": {
+      "rule": {
+        "n": 6939,
+        "positives": 699,
+        "base_rate": 0.1007,
+        "auc": 0.6415,
+        "brier": 0.0911,
+        "precision_top10": 0.1659,
+        "recall_at_threshold": 1.0,
+        "flagged_share": 1.0,
+        "value_per_drug_uzs": 18072645.0
+      },
+      "woe_logit": {
+        "n": 6939,
+        "positives": 699,
+        "base_rate": 0.1007,
+        "auc": 0.7641,
+        "brier": 0.0889,
+        "precision_top10": 0.2814,
+        "recall_at_threshold": 0.867,
+        "flagged_share": 0.5371,
+        "value_per_drug_uzs": 61122068.0
+      },
+      "catboost": {
+        "n": 6939,
+        "positives": 699,
+        "base_rate": 0.1007,
+        "auc": 0.7838,
+        "brier": 0.0877,
+        "precision_top10": 0.3131,
+        "recall_at_threshold": 0.8698,
+        "flagged_share": 0.4985,
+        "value_per_drug_uzs": 67219974.0
+      }
+    },
+    "strategies": {
+      "never_prepare": 0.0,
+      "always_prepare": 18072645.0
+    }
+  }
+}

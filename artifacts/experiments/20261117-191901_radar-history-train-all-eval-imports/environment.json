@@ -1,0 +1,16 @@
+{
+  "pulse_version": "0.1.0",
+  "python": "3.12.2",
+  "platform": "macOS-15.3.2-arm64-arm-64bit",
+  "packages": {
+    "numpy": "2.0.2",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "catboost": "1.2.8",
+    "pyarrow": "21.0.0",
+    "pydantic": "2.11.7"
+  },
+  "git_commit": "HEAD",
+  "git_dirty": true,
+  "seed": 42
+}

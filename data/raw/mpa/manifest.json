@@ -1,0 +1,90 @@
+{
+  "2026-03-01_full_list.xlsx": {
+    "date": "2026-03-01",
+    "kind": "full_list",
+    "title": "Начиная с 1 марта 2026 года список референтных цен на рецептурные лекарственные средства",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/f6c2123f-b181-4fa2-803a-d00e2d8e0221",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 279382,
+    "sha256": "f3f976ff1c1938b3036a6ec8945f238b3cb582326721b7e0a5679aaa835d362a",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  },
+  "2026-04-01_revised.xlsx": {
+    "date": "2026-04-01",
+    "kind": "revised",
+    "title": "Список рецептурных ЛС, референтная цена которых была пересмотрена по состоянию на 1 апреля 2026 года",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/f2cb76fb-317f-4677-995e-c0c4d6caf041",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 300314,
+    "sha256": "25479ec666fd3257441095247bc629834ca82fcac19db7ca1adeecf4a141fba1",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  },
+  "2026-04-11_revised.xlsx": {
+    "date": "2026-04-11",
+    "kind": "revised",
+    "title": "Список рецептурных ЛС, референтная цена которых была пересмотрена по состоянию на 11 апреля 2026 года",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/f54aec1d-15c8-45fb-bfbd-5a5538852e4a",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 271547,
+    "sha256": "e2506d045cfee011acd73e7ef4057ba995787285613e2bfc7d4e31cdd87f582e",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  },
+  "2026-05-01_revised.xlsx": {
+    "date": "2026-05-01",
+    "kind": "revised",
+    "title": "С 1 мая 2026 года для производителей и поставщиков были пересмотрены референтные цены на рецептурные ЛС",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/52b36cd8-d70a-4f3c-9827-a45543322498",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 267703,
+    "sha256": "7512b262046bfd13179e29e3e562a23b322fe8f916cb49cbc87e47f6bad102cd",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  },
+  "2026-09-01_revised.xlsx": {
+    "date": "2026-09-01",
+    "kind": "revised",
+    "title": "Список рецептурных ЛС, референтная цена которых была пересмотрена по состоянию на 1 сентября 2026 года",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/85d71378-567b-45f7-93e0-926d431070b1",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 214665,
+    "sha256": "cf6b4ff6f1f048c91f7411964fefdd43c7ef00b64c43a16d2b81d257c6cf2258",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  },
+  "2026-09-16_revised.xlsx": {
+    "date": "2026-09-16",
+    "kind": "revised",
+    "title": "Список рецептурных ЛС, референтная цена которых была пересмотрена по состоянию на 16 сентября 2026 года",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/22d3c51e-221e-4f44-9160-f44d475c7774",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 203363,
+    "sha256": "6b4a6cd056a7c4fe92f98e19dbb4d96d9fc61e4d833b9addf8acbd0a3b17d539",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  },
+  "2026-09-24_revised.xlsx": {
+    "date": "2026-09-24",
+    "kind": "revised",
+    "title": "Список рецептурных ЛС, референтная цена которых была пересмотрена по состоянию на 24 сентября 2026 года",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/5d111fd6-e016-4070-a265-15b3e128c4a8",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 208210,
+    "sha256": "46dc8bc59535fc59b71faa23f7ef520afe19080acb9b64402da33ab78bb1e822",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  },
+  "2026-10-01_revised.xlsx": {
+    "date": "2026-10-01",
+    "kind": "revised",
+    "title": "Список рецептурных ЛС, референтная цена которых была пересмотрена по состоянию на 1 октября 2026 года",
+    "page": "https://mpa.uz/ru/reference-prices",
+    "url": "https://api.mpa.uz/file-api/v2/files/37d0fe6d-610f-4935-9b88-842ffb5bee29",
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": 215324,
+    "sha256": "a68a68db76a2f33d04fdbf9dbdeaee0291c5c98b47db4848eec1a68d30093ef2",
+    "downloaded_at": "2026-11-17T18:34:39+00:00"
+  }
+}
