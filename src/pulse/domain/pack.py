@@ -90,6 +90,8 @@ class Components:
     price: float
     fx: float
     customs_value: np.ndarray  # таможенная стоимость (CIP) на упаковку, UZS: закупка в $ + доставка
+    purchase_usd: np.ndarray   # платёж производителю в долларах на упаковку, UZS по текущему курсу
+    stock_months: np.ndarray   # средний запас (с учётом страхового) в месяцах продаж
 
     @property
     def total(self) -> np.ndarray:
@@ -191,6 +193,8 @@ def components(df: pd.DataFrame, fx: float | None = None, price: float | None = 
         fixed=clearance_annual + marketing_annual + regulatory_annual + capital_annual,
         volume=vol, recv_rate=recv_rate, price=price, fx=fx,
         customs_value=purchase_usd + deliv,
+        purchase_usd=purchase_usd,
+        stock_months=batch_months / 2 + safety,
     )
 
 

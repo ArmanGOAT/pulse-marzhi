@@ -38,6 +38,10 @@ costs:
   cut_pass_through:        {value: 1.0, unit: share, status: estimate, source: "Доля снижения потолка, на которую производитель снижает цену закупки для новых партий; товар на складе уже куплен по старой цене"}
   prep_window_days:        {value: 120, unit: day, status: estimate, source: "Самое раннее, за сколько дней до пересмотра переходим на мелкие партии"}
   prep_batch_months:       {value: 1.0, unit: month, status: estimate, source: "Размер мелкой партии в окне подготовки"}
+  protection_share:        {value: 0.5, unit: share, status: estimate, source: "Доля обесценения склада, которую компенсирует производитель по пункту о защите цены (в Корее такая практика обычна, Dailypharm 06.2025)"}
+  protection_premium:      {value: 0.01, unit: share, status: estimate, source: "Надбавка к цене закупки, которую производитель может попросить за такой пункт"}
+  protection_invest:       {value: 20000000, unit: UZS, status: estimate, source: "Юридическая работа по изменению контракта"}
+  protection_months:       {value: 3, unit: month, status: estimate, source: "Срок переговоров с производителем"}
   invest_rate:             {value: 0.07, unit: share/year, status: fact, source: "Льготный кредит под локализацию 7% (anhor.uz)"}
 
 risk:
@@ -47,7 +51,8 @@ risk:
   delivery_sd:     {value: 0.20, unit: share, status: estimate, source: "Разброс стоимости доставки"}
   cut_min:         {value: 0.05, unit: share, status: estimate, source: "Новое снижение потолка от 5%"}
   cut_max:         {value: 0.15, unit: share, status: estimate, source: "Новое снижение потолка до 15%"}
-  cut_prob_default: {value: 0.25, unit: probability, status: estimate, source: "До готовности радара"}
+  cut_prob_default: {value: 0.25, unit: probability, status: estimate, source: "Если радар недоступен"}
+  revision_month:  {value: 3, unit: month, status: estimate, source: "Через сколько месяцев ожидаем следующую волну (волны шли в янв., июл., нояб. 2026)"}
   n_scenarios:     {value: 2000, unit: count, status: estimate, source: "Число вариантов года в Монте-Карло"}
   max_loss_prob:   {value: 0.10, unit: probability, status: fact, source: "Жёсткое правило системы: убыток не выше 10%"}
   patients_estimate: {value: 11500, unit: person, status: estimate, source: "150 000 уп. × 28 таб. / 365 дней"}
