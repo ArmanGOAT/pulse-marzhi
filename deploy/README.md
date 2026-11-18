@@ -76,4 +76,4 @@ SSH_ORIGINAL_COMMAND=ghcr.io/armangoat/pulse-marzhi@sha256:<digest> pulse-deploy
 Локально: `make data-latest && make train`, проверить отчёт запуска, добавить в `.gitignore` исключение
 `!artifacts/experiments/<новый запуск>/scores/` (как у `20261117-193129_radar-main`), закоммитить новые снимки,
 `manifest.json`, `LATEST` и папку запуска, затем push в `main` — CI выкатит. Цифры на странице после этого изменятся,
-сценарий демо (`docs/demo-script.md`) и README нужно сверить заново.
+README нужно сверить заново.
