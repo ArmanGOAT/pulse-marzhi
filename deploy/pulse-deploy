@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Выкатка «Пульса маржи» на vm1. Ставится в /usr/local/sbin/pulse-deploy и запускается как
+# принудительная команда ключа CI в /root/.ssh/authorized_keys:
+#   restrict,command="/usr/local/sbin/pulse-deploy" ssh-ed25519 AAAA... pulse-marzhi-ci
+# Ключ CI ничего другого на сервере сделать не может.
+#
+# Вход: SSH_ORIGINAL_COMMAND — образ по digest (ghcr.io/armangoat/pulse-marzhi@sha256:...);
+#       stdin — две строки: логин и токен GHCR (токен нужен только на время docker pull).
+# Новый контейнер должен стать healthy за 3 минуты, иначе откат на предыдущий образ.
+# Ручной запуск на сервере (образ уже скачан или публичный):
+#   SSH_ORIGINAL_COMMAND=ghcr.io/armangoat/pulse-marzhi@sha256:... pulse-deploy </dev/null
+set -euo pipefail
+umask 077
+
+APP_DIR=/opt/pulse-marzhi
+COMPOSE=(docker compose -p pulse-marzhi -f "$APP_DIR/compose.prod.yaml")
+STATE=$APP_DIR/.deployed-image
+SOURCE_LABEL=org.opencontainers.image.source=https://github.com/ArmanGOAT/pulse-marzhi
+KEEP_IMAGES_FOR=168h   # старые образы держим неделю для ручного отката
+
+log() { echo "pulse-deploy: $*" >&2; }
+
+image=${SSH_ORIGINAL_COMMAND:-}
+if [[ ! $image =~ ^ghcr\.io/armangoat/pulse-marzhi@sha256:[0-9a-f]{64}$ ]]; then
+    log "ожидаю ghcr.io/armangoat/pulse-marzhi@sha256:<digest>, получено: '${image:0:120}'"
+    exit 2
+fi
+registry_user=
+registry_token=
+IFS= read -r registry_user || true
+IFS= read -r registry_token || true
+
+exec 9>/run/lock/pulse-deploy.lock
+flock -n 9 || { log "уже идёт другая выкатка"; exit 3; }
+
+# Логин в GHCR во временный конфиг docker: токен не остаётся на диске после pull.
+pull() {
+    local cfg rc=0
+    cfg=$(mktemp -d)
+    if [[ -n $registry_token ]]; then
+        printf '%s' "$registry_token" |
+            DOCKER_CONFIG=$cfg docker login ghcr.io -u "${registry_user:-ci}" --password-stdin >/dev/null || rc=$?
+    fi
+    if [[ $rc -eq 0 ]]; then
+        DOCKER_CONFIG=$cfg docker pull -q "$1" >/dev/null || rc=$?
+    fi
+    rm -rf "$cfg"
+    return "$rc"
+}
+
+up() { PULSE_IMAGE=$1 "${COMPOSE[@]}" up -d --remove-orphans --wait --wait-timeout 180; }
+
+previous=$(cat "$STATE" 2>/dev/null || true)
+
+log "скачиваю $image"
+pull "$image"
+log "запускаю"
+if up "$image"; then
+    printf '%s\n' "$image" > "$STATE"
+    docker image prune -af --filter "label=$SOURCE_LABEL" --filter "until=$KEEP_IMAGES_FOR" >/dev/null || true
+    log "готово: $image"
+    exit 0
+fi
+
+log "новый контейнер не стал healthy, последние логи:"
+PULSE_IMAGE=$image "${COMPOSE[@]}" logs --tail 80 >&2 || true
+if [[ -n $previous ]]; then
+    log "откат на $previous"
+    up "$previous" || log "откат не удался"
+fi
+exit 1

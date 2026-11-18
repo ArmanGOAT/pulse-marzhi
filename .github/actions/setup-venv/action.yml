@@ -1,0 +1,24 @@
+name: Python и зависимости
+description: Python 3.12 и .venv из requirements.lock; окружение кэшируется целиком и ставится заново только при смене lock-файла
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v7
+      id: py
+      with:
+        python-version: "3.12"
+
+    - name: Кэш .venv
+      id: venv
+      uses: actions/cache@v6
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ runner.arch }}-py${{ steps.py.outputs.python-version }}-${{ hashFiles('requirements.lock') }}
+
+    - name: Установка зависимостей
+      if: steps.venv.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        python -m venv .venv
+        .venv/bin/python -m pip install --upgrade pip
+        .venv/bin/python -m pip install -r requirements.lock

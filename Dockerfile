@@ -10,15 +10,19 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app/src
 
 WORKDIR /app
+RUN useradd --system --uid 10001 pulse
 COPY requirements.lock pyproject.toml ./
 RUN pip install -r requirements.lock
 
-COPY src ./src
+# Слои от редко меняющихся к частым: при правке кода слои данных берутся из кэша сборки
+# и не перекачиваются на сервер. data/ и artifacts/ принадлежат pulse: сборка ниже идёт от его имени
+# (без отдельного слоя chown -R, который копировал бы все данные), а сервер пишет в data/ кэш панели.
+COPY --chown=pulse data ./data
+COPY --chown=pulse artifacts ./artifacts
 COPY config ./config
-COPY web ./web
-COPY data ./data
-COPY artifacts ./artifacts
+COPY src ./src
 
+USER pulse
 RUN set -e; \
     if ! ls data/raw/mpa_api/registry_*.jsonl.gz >/dev/null 2>&1; then \
       echo "Нет снимков реестра: скачиваю с mpa.uz"; python -m pulse.data.loaders.mpa_api; \
@@ -31,8 +35,8 @@ RUN set -e; \
     fi; \
     python -c "from pulse.api.main import data_status as s; d = s(); print(d); assert d['ready'], d['missing']"
 
-RUN useradd --system --uid 10001 pulse && chown -R pulse /app/data
-USER pulse
+# Страница последней: её правки не пересобирают панель реестра.
+COPY web ./web
 
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s \
