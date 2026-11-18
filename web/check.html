@@ -23,20 +23,41 @@
 
 <main class="ck-main">
   <section class="ck-hero" aria-labelledby="ck-h1">
-    <h1 id="ck-h1">Снизят ли цену на ваш препарат?</h1>
-    <p class="ck-lead">Введите название препарата или действующее вещество. Мы покажем, насколько вероятно,
-      что государство снизит его цену в ближайшие месяцы, и что с этим делать.</p>
+    <h1 id="ck-h1">Снизят ли цену на ваши препараты?</h1>
+    <p class="ck-lead">Проверьте один препарат или сразу весь список. Мы покажем, насколько вероятно,
+      что государство снизит цену в ближайшие месяцы, и что с этим делать.</p>
 
-    <label class="ck-label" for="ck-q">Название препарата</label>
-    <input id="ck-q" class="ck-input" type="search" autocomplete="off" spellcheck="false"
-           placeholder="Например: Сербан" aria-describedby="ck-examples" aria-controls="ck-results">
-    <p class="ck-examples" id="ck-examples">Попробуйте:
-      <button type="button" class="ck-example">Сербан</button>
-      <button type="button" class="ck-example">Ксарелто</button>
-      <button type="button" class="ck-example">амлодипин</button>
-    </p>
-    <p class="ck-status" id="ck-status" role="status" aria-live="polite"></p>
-    <ul class="ck-results" id="ck-results"></ul>
+    <div class="ck-tabs" role="tablist" aria-label="Что проверить">
+      <button type="button" role="tab" id="tab-one" aria-controls="panel-one" aria-selected="true">Один препарат</button>
+      <button type="button" role="tab" id="tab-list" aria-controls="panel-list" aria-selected="false">Список препаратов</button>
+    </div>
+
+    <div id="panel-one" role="tabpanel" aria-labelledby="tab-one">
+      <label class="ck-label" for="ck-q">Название препарата или действующее вещество</label>
+      <input id="ck-q" class="ck-input" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Например: Сербан" aria-describedby="ck-examples" aria-controls="ck-results">
+      <p class="ck-examples" id="ck-examples">Попробуйте:
+        <button type="button" class="ck-example">Сербан</button>
+        <button type="button" class="ck-example">Ксарелто</button>
+        <button type="button" class="ck-example">амлодипин</button>
+      </p>
+      <p class="ck-status" id="ck-status" role="status" aria-live="polite"></p>
+      <ul class="ck-results" id="ck-results"></ul>
+    </div>
+
+    <div id="panel-list" role="tabpanel" aria-labelledby="tab-list" hidden>
+      <label class="ck-label" for="ck-list">Список препаратов — по одному в строке, дозировку можно добавить в конце</label>
+      <textarea id="ck-list" class="ck-input ck-textarea" rows="7" spellcheck="false"
+                placeholder="Сербан 20 мг&#10;Ксарелто&#10;амлодипин 5"></textarea>
+      <div class="ck-file">
+        <label class="btn" for="ck-file">Загрузить файл</label>
+        <input id="ck-file" type="file" accept=".xlsx,.csv,.txt" class="sr-only">
+        <span class="note">Excel, CSV или TXT: названия в первом столбце, дозировка — во втором (необязательно). До 200 строк.</span>
+      </div>
+      <button type="button" class="btn btn-primary ck-run" id="ck-run">Проверить список</button>
+      <p class="ck-status" id="ck-list-status" role="status" aria-live="polite"></p>
+      <div id="ck-batch"></div>
+    </div>
   </section>
 
   <section class="ck-card" id="ck-card" hidden aria-live="polite"></section>

@@ -72,3 +72,29 @@ def test_product_search_card_and_reports():
     assert {"Итог", "История цены", "Аналоги"} <= set(load_workbook(io.BytesIO(xlsx.content)).sheetnames)
     assert client.get("/api/products/unknown").status_code == 404
     assert client.get("/api/products", params={"q": "x"}).json()["results"] == []
+
+
+def test_product_list_check_and_reports():
+    """Список препаратов: найденные, ненайденные с объяснением, без дублей; файл xlsx читается; отчёты открываются."""
+    text = "Сербан 20 мг\nКсарелто\nабракадабра\nКсарелто 99 мг"
+    res = client.post("/api/products/batch", json={"text": text}).json()
+    status = {r["query"]: r["status"] for r in res["rows"]}
+    assert status["Сербан 20 мг"] == "found" and status["абракадабра"] == "absent"
+    assert status["Ксарелто 99 мг"] == "duplicate"  # те же упаковки, что в строке «Ксарелто»
+    ids = [m["id"] for r in res["rows"] for m in r["matches"]]
+    assert len(ids) == len(set(ids)) == res["summary"]["packages"] and res["summary"]["not_found"] == 1
+    assert client.get("/api/products", params={"q": "абракадабра"}).json()["not_found"]["kind"] == "absent"
+    from openpyxl import Workbook
+    wb = Workbook()
+    for row in (["Препарат", "Доза"], ["Сербан", 20], ["Ксилтесс", None]):
+        wb.active.append(row)
+    buf = io.BytesIO()
+    wb.save(buf)
+    parsed = client.post("/api/products/batch/parse?filename=list.xlsx", content=buf.getvalue()).json()
+    assert parsed["items"] == ["Сербан 20", "Ксилтесс"]
+    assert client.post("/api/products/batch/parse?filename=list.doc", content=b"x").status_code == 415
+    pdf = client.post("/api/products/batch/report/pdf", json={"text": text})
+    assert pdf.status_code == 200 and pdf.content.startswith(b"%PDF")
+    xlsx = client.post("/api/products/batch/report/xlsx", json={"text": text})
+    assert {"Сводка", "Не найдено", "Подробно", "Как читать"} <= set(load_workbook(io.BytesIO(xlsx.content)).sheetnames)
+    assert client.post("/api/products/batch", json={"text": " "}).status_code == 422

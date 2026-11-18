@@ -18,7 +18,12 @@ async function getJSON(url) {
 
 const riskPill = (level, label) => h("span", { class: `risk risk-${level}`, text: label });
 
-// ---------- поиск ----------
+// ---------- поиск одного препарата ----------
+const resultButton = (r) => h("button", { class: "ck-result", type: "button", "data-id": r.id }, [
+  h("span", {}, [h("b", { text: r.title }), h("span", { class: "sub", text: `${r.subtitle} · ${r.price}` })]),
+  riskPill(r.level, `${r.level_label} · ${F.pct0(r.p_cut)}`),
+]);
+
 let seq = 0;
 async function search(q) {
   const my = ++seq;
@@ -26,15 +31,17 @@ async function search(q) {
   if (q.length < 2) { list.replaceChildren(); status.textContent = ""; return; }
   status.textContent = "Ищем…";
   try {
-    const { results } = await getJSON(`/api/products?q=${encodeURIComponent(q)}`);
+    const res = await getJSON(`/api/products?q=${encodeURIComponent(q)}`);
     if (my !== seq) return;  // пришёл ответ на старый запрос
-    status.textContent = results.length
-      ? `Найдено: ${results.length}${results.length === 20 ? " (показаны первые 20, уточните название)" : ""}. Выберите упаковку.`
-      : "Ничего не нашли. Проверьте написание или введите действующее вещество, например «ривароксабан».";
-    list.replaceChildren(...results.map((r) => h("li", {}, h("button", { class: "ck-result", type: "button", "data-id": r.id }, [
-      h("span", {}, [h("b", { text: r.title }), h("span", { class: "sub", text: `${r.subtitle} · ${r.price}` })]),
-      riskPill(r.level, `${r.level_label} · ${F.pct0(r.p_cut)}`),
-    ]))));
+    if (!res.results.length) {
+      status.textContent = "";
+      list.replaceChildren(h("li", { class: "ck-notfound" }, [h("b", { text: `«${q}» не найден` }), res.not_found.message]));
+      return;
+    }
+    status.textContent = res.total > res.results.length
+      ? `Найдено: ${res.total}, показаны первые ${res.results.length}. Уточните название или добавьте дозировку.`
+      : `Найдено: ${res.total}. Выберите упаковку.`;
+    list.replaceChildren(...res.results.map((r) => h("li", {}, resultButton(r))));
   } catch (e) {
     status.textContent = e.message;
   }
@@ -45,10 +52,12 @@ input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(
 for (const b of document.querySelectorAll(".ck-example")) {
   b.addEventListener("click", () => { input.value = b.textContent; search(input.value); input.focus(); });
 }
-list.addEventListener("click", (e) => {
-  const b = e.target.closest("button[data-id]");
-  if (b) open(b.dataset.id);
-});
+for (const el of [list, $("ck-batch")]) {
+  el.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-id]");
+    if (b) open(b.dataset.id);
+  });
+}
 
 // ---------- карточка ----------
 function scale(c) {
@@ -141,3 +150,82 @@ async function open(id) {
 }
 
 if (location.hash.length > 1) open(location.hash.slice(1));
+
+// ---------- вкладки ----------
+function showTab(which) {
+  for (const [t, p] of [["tab-one", "panel-one"], ["tab-list", "panel-list"]]) {
+    const on = t === which;
+    $(t).setAttribute("aria-selected", String(on));
+    $(p).hidden = !on;
+  }
+}
+$("tab-one").addEventListener("click", () => { showTab("tab-one"); input.focus(); });
+$("tab-list").addEventListener("click", () => { showTab("tab-list"); $("ck-list").focus(); });
+
+// ---------- список препаратов ----------
+const area = $("ck-list"), lstatus = $("ck-list-status"), out = $("ck-batch");
+
+async function runBatch() {
+  const text = area.value.trim();
+  if (!text) { lstatus.textContent = "Введите хотя бы один препарат или загрузите файл."; return; }
+  lstatus.textContent = "Проверяем список…";
+  out.replaceChildren();
+  let res;
+  try {
+    const r = await fetch("/api/products/batch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+    res = await r.json();
+    if (!r.ok) throw new Error(res.detail || "Не удалось проверить список.");
+  } catch (e) { lstatus.textContent = e.message; return; }
+  const s = res.summary;
+  lstatus.textContent = `Проверено строк: ${s.lines}. Найдено упаковок: ${s.packages}.`;
+  out.replaceChildren(
+    h("div", { class: "ck-summary" }, [
+      riskPill("high", `Высокий риск: ${s.high}`), riskPill("mid", `Средний: ${s.mid}`), riskPill("low", `Низкий: ${s.low}`),
+      h("span", { class: "chip", text: `Не найдено: ${s.not_found}` }),
+    ]),
+    h("div", { class: "ck-actions" }, [
+      h("button", { class: "btn btn-primary", type: "button", "data-fmt": "pdf", text: "Скачать отчёт PDF по всему списку" }),
+      h("button", { class: "btn", type: "button", "data-fmt": "xlsx", text: "Скачать Excel" }),
+    ]),
+    ...res.rows.map((r) => h("div", { class: "ck-group" }, [
+      h("h3", { text: `«${r.query}»` }),
+      ...(r.matches.length ? r.matches.map(resultButton) : [h("p", { class: "miss", text: r.message })]),
+      r.matches.length && r.message ? h("p", { class: "note", text: r.message }) : null,
+      r.more ? h("p", { class: "note", text: `Ещё ${r.more} упаковок — добавьте дозировку, чтобы сузить поиск.` }) : null,
+    ])),
+  );
+  for (const b of out.querySelectorAll("button[data-fmt]")) b.addEventListener("click", () => download(b, text));
+}
+
+async function download(btn, text) {
+  btn.setAttribute("aria-busy", "true");
+  try {
+    const r = await fetch(`/api/products/batch/report/${btn.dataset.fmt}`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+    if (!r.ok) throw new Error("Не удалось сформировать отчёт.");
+    const a = h("a", { href: URL.createObjectURL(await r.blob()),
+      download: `pulse-spisok-${new Date().toISOString().slice(0, 10)}.${btn.dataset.fmt}` });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  } catch (e) { lstatus.textContent = e.message; } finally { btn.removeAttribute("aria-busy"); }
+}
+
+$("ck-run").addEventListener("click", runBatch);
+$("ck-file").addEventListener("change", async (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  lstatus.textContent = `Читаем файл «${f.name}»…`;
+  try {
+    const r = await fetch(`/api/products/batch/parse?filename=${encodeURIComponent(f.name)}`, { method: "POST", body: await f.arrayBuffer() });
+    const res = await r.json();
+    if (!r.ok) throw new Error(res.detail || "Не удалось прочитать файл.");
+    if (!res.items.length) throw new Error("В файле не нашлось названий: проверьте, что они в первом столбце.");
+    area.value = res.items.join("\n");
+    runBatch();
+  } catch (err) { lstatus.textContent = err.message; }
+  e.target.value = "";
+});
+
+// ссылка вида check.html?list=Сербан 20;Ксарелто сразу открывает проверку списка
+const preset = new URLSearchParams(location.search).get("list");
+if (preset) { showTab("tab-list"); area.value = preset.split(";").map((x) => x.trim()).join("\n"); runBatch(); }

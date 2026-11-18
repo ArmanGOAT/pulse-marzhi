@@ -15,7 +15,7 @@ from functools import lru_cache
 from urllib.parse import quote
 
 import numpy as np
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -289,7 +289,53 @@ def _need_catalog() -> None:
 @app.get("/api/products")
 def products_search(q: str = "", limit: int = Query(20, ge=1, le=50)) -> dict:
     _need_catalog()
-    return {"query": q, "results": products.search(q, limit)}
+    return {"query": q, **products.search(q, limit)}
+
+
+class BatchIn(BaseModel):
+    items: list[str] = Field(default_factory=list, max_length=products.MAX_ITEMS)
+    text: str | None = Field(None, max_length=50_000)
+
+    def lines(self) -> list[str]:
+        return products.split_items(self.text) if self.text else [x for x in self.items if x.strip()]
+
+
+@app.post("/api/products/batch")
+def products_batch(body: BatchIn) -> dict:
+    _need_catalog()
+    lines = body.lines()
+    if not lines:
+        raise HTTPException(422, "Список пуст: введите хотя бы один препарат.")
+    return _clean(products.batch(lines))
+
+
+@app.post("/api/products/batch/parse")
+async def products_parse(request: Request, filename: str = "list.txt") -> dict:
+    """Файл списка (.txt, .csv, .xlsx) приходит телом запроса: так не нужен разбор multipart."""
+    data = await request.body()
+    if len(data) > 2_000_000:
+        raise HTTPException(413, "Файл больше 2 МБ.")
+    if not filename.lower().endswith((".txt", ".csv", ".xlsx")):
+        raise HTTPException(415, "Поддерживаются файлы .txt, .csv и .xlsx.")
+    try:
+        items = products.parse_file(filename, data)
+    except Exception as e:  # битый файл не должен ронять сервер
+        raise HTTPException(422, "Не удалось прочитать файл. Сохраните список как .xlsx или .csv и попробуйте снова.") from e
+    return {"items": items, "count": len(items)}
+
+
+@app.post("/api/products/batch/report/{fmt}")
+def products_batch_report(fmt: str, body: BatchIn) -> Response:
+    res = products_batch(body)
+    res["cards"] = [products.card(m["id"]) for r in res["rows"] for m in r["matches"]]
+    stamp = date.today().isoformat()
+    disp = f'attachment; filename="pulse-list-{stamp}.{fmt}"'
+    if fmt == "pdf":
+        return Response(report.batch_pdf_bytes(res), media_type="application/pdf", headers={"Content-Disposition": disp})
+    if fmt == "xlsx":
+        return Response(report.batch_xlsx_bytes(res), headers={"Content-Disposition": disp},
+                        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    raise HTTPException(404, "Формат: pdf или xlsx")
 
 
 @app.get("/api/products/{pid}")
