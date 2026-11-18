@@ -37,3 +37,22 @@ def test_export(fmt, magic):
     if fmt == "xlsx":
         wb = load_workbook(io.BytesIO(r.content))
         assert {"План", "Затраты", "Стратегии", "Допущения"} <= set(wb.sheetnames)
+
+
+def test_health_reports_data_status():
+    data = client.get("/api/health").json()["data"]
+    assert {"ready", "registry_snapshots", "radar_scores", "missing"} <= set(data)
+
+
+def test_missing_data_gives_clear_messages(monkeypatch):
+    """Свежий клон без make data / make train: понятная ошибка и предупреждение, а не 500 и тихая подмена."""
+    from pulse.api import main
+    from pulse.data import registry
+
+    monkeypatch.setattr(registry, "snapshot_dates", lambda: [])
+    r = client.get("/api/market/rivaroxaban")
+    assert r.status_code == 503 and "make data" in r.json()["detail"]
+
+    monkeypatch.setattr(main, "data_status", lambda: {"ready": False, "radar_scores": False, "missing": ["x"]})
+    plan = client.post("/api/plan", json=BODY).json()
+    assert plan["warnings"] and "make train" in plan["warnings"][0]

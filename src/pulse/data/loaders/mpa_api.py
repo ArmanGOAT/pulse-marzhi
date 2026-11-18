@@ -92,5 +92,21 @@ def load_snapshot(day: date | str) -> pd.DataFrame:
     return df
 
 
+# Последний снимок, на котором посчитаны все цифры в README и документах. По умолчанию make data
+# скачивает ровно этот набор, чтобы результат воспроизводился в любой день; свежие снимки — флаг --until today.
+SNAPSHOT_END = date(2026, 11, 17)
+
+
+def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Снимки реестра mpa.uz на 1-е число каждого месяца")
+    parser.add_argument("--until", default=SNAPSHOT_END.isoformat(),
+                        help="последняя дата снимка ГГГГ-ММ-ДД или today (по умолчанию %(default)s)")
+    args = parser.parse_args()
+    end = date.today() if args.until == "today" else date.fromisoformat(args.until)
+    download(end=end, extra=[end] if end.day != 1 else None)
+
+
 if __name__ == "__main__":
-    download(extra=[date(2026, 11, 17)])
+    main()

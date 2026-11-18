@@ -7,13 +7,18 @@ const OUR = "Сербан";
 
 async function api(path, body) {
   const r = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
-  if (!r.ok) throw new Error(`${path}: ${r.status}`);
+  if (!r.ok) {
+    let detail = `${path}: ${r.status}`;
+    try { detail = (await r.json()).detail || detail; } catch { /* не JSON */ }
+    throw new Error(detail);
+  }
   return r;
 }
 const json = async (path, body) => (await api(path, body)).json();
 
 function fail(el, err) {
-  el.replaceChildren(h("p", { class: "alert", text: `Нет ответа от сервера (${err.message}). Запустите make serve.` }));
+  const offline = err instanceof TypeError;  // сеть: сервер не запущен
+  el.replaceChildren(h("p", { class: "alert", text: offline ? "Нет ответа от сервера. Запустите make serve." : err.message }));
 }
 
 function stat(label, value, sub, opts = {}) {
@@ -292,7 +297,8 @@ const plan = {
         `плохой год ${F.signed(pl.profit_p10_p50_p90[0], F.bn)}; сейчас ${F.signed(cu.profit_p10_p50_p90[1], F.bn)} и ${F.signed(cu.profit_p10_p50_p90[0], F.bn)}`),
     ]);
     const msg = h("p", { class: d.feasible ? "note" : "alert", text: `${d.message} Вероятность пересмотра ${F.pct0(d.p_cut)} (${d.p_cut_source}). Перебрано ${F.int(d.n_strategies)} стратегий × 2000 сценариев за ${F.dec2(d.seconds)} с.` });
-    summary.replaceChildren(h("div", { class: "slide-text" }, [heroes, stats, msg]));
+    const warns = (d.warnings || []).map((w) => h("p", { class: "alert", text: w }));
+    summary.replaceChildren(h("div", { class: "slide-text" }, [heroes, stats, msg, ...warns]));
     $("pl-actions").replaceChildren(...d.actions.map((a) => h("li", { class: "action" }, [
       h("div", {}, [h("div", { class: "action-text", text: a.text }),
         h("div", { class: "action-meta", text: `${a.invest ? F.money(a.invest) : "без вложений"} · ${a.months} мес. · ${a.note}` })]),
@@ -429,8 +435,21 @@ function initNav() {
   for (const sec of document.querySelectorAll(".slide")) io.observe(sec);
 }
 
+async function dataBanner() {
+  try {
+    const { data } = await json("/api/health");
+    if (data.ready) return;
+    const b = h("div", { class: "banner", role: "status" }, [
+      h("b", { text: "Не все данные загружены. " }),
+      `Не хватает: ${data.missing.join("; ")}. Пока часть экранов недоступна или считается на допущениях. Всё сразу: make demo.`,
+    ]);
+    document.querySelector(".topbar").after(b);
+  } catch { /* сервер недоступен — об этом скажут разделы */ }
+}
+
 $("present").addEventListener("click", () => present(true));
 initTheme();
 initNav();
+dataBanner();
 await Promise.allSettled([pack.init(), market.init(), radar.init(), stock.init(), plan.init()]);
 document.body.dataset.ready = "1";

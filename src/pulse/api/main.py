@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import contextlib
 import json
+import logging
 import threading
 from contextlib import asynccontextmanager
 from datetime import date
@@ -27,8 +28,32 @@ from pulse.domain import pack, regulation
 from pulse.export import report
 from pulse.ml import experiments
 
+log = logging.getLogger("uvicorn.error")
+
+
+def data_status() -> dict:
+    """Что из данных на месте. В git лежат курсы ЦБ, списки пересмотров и отчёты радара;
+    снимки реестра и прогнозы радара по упаковкам появляются после make data и make train."""
+    snaps = len(registry.snapshot_dates())
+    try:
+        run = experiments.latest_dir()
+        run_id, scores = run.name, (run / "scores" / "test.parquet").exists()
+    except OSError:
+        run_id, scores = None, False
+    missing = []
+    if not snaps:
+        missing.append("снимки реестра mpa.uz — выполните make data (нужен интернет)")
+    if not scores:
+        missing.append("прогнозы радара по упаковкам — выполните make train")
+    return {"ready": not missing, "registry_snapshots": snaps, "radar_run": run_id, "radar_scores": scores,
+            "missing": missing}
+
 
 def _warm() -> None:
+    status = data_status()
+    if not status["ready"]:
+        log.warning("Пульс маржи: не хватает данных: %s. Быстрый путь: make demo", "; ".join(status["missing"]))
+        return
     with contextlib.suppress(Exception):  # прогрев не должен ронять сервер
         rivaroxaban_history()
 
@@ -58,7 +83,7 @@ def _clean(x):
 
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "version": __version__}
+    return {"status": "ok", "version": __version__, "data": data_status()}
 
 
 @app.get("/api/meta")
@@ -148,6 +173,8 @@ def rivaroxaban_history() -> dict:
 
 @app.get("/api/market/rivaroxaban")
 def market_rivaroxaban() -> dict:
+    if not registry.snapshot_dates():
+        raise HTTPException(503, "Нет снимков реестра mpa.uz. Выполните make data (нужен интернет) и перезапустите сервер.")
     return rivaroxaban_history()
 
 
@@ -227,6 +254,8 @@ def plan(body: PlanIn) -> dict:
     out = {
         "inputs": res.inputs, "p_cut": res.p_cut, "p_cut_source": res.p_cut_source, "cut_source": res.cut_source,
         "feasible": res.feasible, "message": res.message, "seconds": res.seconds,
+        "warnings": [] if data_status()["radar_scores"] else
+        ["Размер снижений взят из допущения конфига, а не из реальных снижений: нет прогнозов радара (make train)."],
         "current": res.current, "plan": res.plan, "actions": res.actions,
         "strategies": {c: sample[c].tolist() for c in ("invest", "margin_now", "margin_durable", "p_loss", "feasible")},
         "n_strategies": int(len(s)),

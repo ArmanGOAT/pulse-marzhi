@@ -1,5 +1,6 @@
 /* Раскладка страницы демо: верхняя панель + пять «моментов» на всю высоту экрана. */
 html { scroll-behavior: smooth; scroll-snap-type: y proximity; scroll-padding-top: 64px; }
+body:has(.banner) { scroll-padding-top: 120px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 .topbar {
@@ -72,3 +73,7 @@ body.presenting .presenter-hud { display: flex; }
   .topbar, .presenter-hud, .controls, .export { display: none !important; }
   .slide { min-height: auto; break-inside: avoid; }
 }
+
+/* предупреждение «не все данные загружены»: полоса сразу под шапкой, видна при прокрутке */
+.banner { position: sticky; top: 56px; z-index: 19; padding: var(--sp-2) var(--sp-5); background: color-mix(in srgb, var(--c-loss) 14%, var(--page)); border-bottom: 1px solid var(--border); color: var(--ink); font-size: var(--fs-sm); }
+@media (max-width: 640px) { .banner { padding: var(--sp-2) var(--sp-4); } }

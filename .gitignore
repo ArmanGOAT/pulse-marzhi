@@ -6,11 +6,12 @@ __pycache__/
 .ruff_cache/
 .DS_Store
 data/processed/
-data/raw/mpa_api/*.jsonl.gz
 artifacts/*.cbm
 artifacts/*.pkl
 artifacts/experiments/*/model.pkl
 artifacts/experiments/*/scores/
+# прогнозы основного запуска нужны API (размеры реальных снижений для сценариев), поэтому лежат в git
+!artifacts/experiments/20261117-193129_radar-main/scores/
 web/node_modules/
 web/dist/
 .env
