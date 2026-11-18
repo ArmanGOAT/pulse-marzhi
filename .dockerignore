@@ -1,0 +1,13 @@
+.git
+.venv
+.claude
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+.DS_Store
+.env
+tests
+docs
+artifacts/**/*.pkl
+artifacts/**/*.cbm
