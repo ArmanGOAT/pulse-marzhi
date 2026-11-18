@@ -14,3 +14,4 @@ artifacts/experiments/*/scores/
 web/node_modules/
 web/dist/
 .env
+.claude/

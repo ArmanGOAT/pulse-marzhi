@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="description" content="Пульс маржи: прогноз пересмотров потолка цены и план мер для импортёра лекарств">
+  <title>Пульс маржи</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236250d6'/%3E%3Cpath d='M5 17h6l3-7 4 13 3-6h6' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="ds/tokens.css">
+  <link rel="stylesheet" href="ds/components.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+<a class="sr-only" href="#pack">К содержанию</a>
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="currentColor" class="ours-text"/><path d="M5 17h6l3-7 4 13 3-6h6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Пульс маржи</span><span class="sub">ривароксабан 20 мг · импорт в Узбекистан</span>
+  </div>
+  <nav class="steps" aria-label="Разделы">
+    <a href="#pack"><span>1</span><b>Упаковка</b></a>
+    <a href="#market"><span>2</span><b>Пересмотры</b></a>
+    <a href="#radar"><span>3</span><b>Радар</b></a>
+    <a href="#stock"><span>4</span><b>Склад</b></a>
+    <a href="#plan"><span>5</span><b>План</b></a>
+  </nav>
+  <div class="tools">
+    <button class="btn" id="present" type="button" title="Режим презентации: пробел — дальше, ← — назад, Esc — выход">▶ Показ</button>
+    <button class="btn icon-btn" id="theme" type="button" aria-label="Сменить тему">◐</button>
+  </div>
+</header>
+
+<main>
+  <!-- 1. Упаковка -->
+  <section class="slide" id="pack" aria-labelledby="pack-title">
+    <div class="slide-text">
+      <p class="kicker">1 · Одна упаковка</p>
+      <h1 class="title" id="pack-title">Из 150 000 сум импортёру остаётся <span id="pack-margin-sum">…</span></h1>
+      <p class="lead">Цену в сумах ограничивает потолок, а <b id="pack-usd-share">80%</b> затрат платится в долларах. Курс вырос на 1% — маржа теряет <b id="pack-sens">0,8 п.п.</b></p>
+      <div class="controls">
+        <label class="field">
+          <span class="field-label">Курс доллара <output id="fx-out" for="fx">12 000 сум</output></span>
+          <input type="range" id="fx" min="11500" max="13000" step="10" value="12000" aria-describedby="fx-hint">
+          <span class="note" id="fx-hint">Курс ЦБ в январе–июне 2026 колебался от 11 935 до 12 320</span>
+        </label>
+      </div>
+      <div class="stats" id="pack-stats" aria-live="polite"></div>
+    </div>
+    <div class="slide-viz">
+      <div class="card">
+        <div class="card-head"><h2 class="card-title">Куда уходят 150 000 сум</h2>
+          <span><span class="prov" data-s="fact">цена и объём — факт</span> <span class="prov" data-s="estimate">затраты — оценка</span></span></div>
+        <div class="chart" id="pack-bar"></div>
+        <div class="legend"><span><i class="key k-usd"></i>в долларах</span><span><i class="key k-uzs"></i>в сумах</span><span><i class="key k-good"></i>маржа</span><span><i class="key k-loss"></i>убыток</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2 class="card-title">Затраты на упаковку, сум</h2></div>
+        <div class="chart" id="pack-items"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Пересмотры -->
+  <section class="slide" id="market" aria-labelledby="market-title">
+    <div class="slide-text">
+      <p class="kicker">2 · Потолок цены пересматривают</p>
+      <h2 class="title" id="market-title">За два года <span id="mk-cut">…</span> из <span id="mk-n">…</span> импортных брендов ривароксабана снижали цену</h2>
+      <p class="lead">С 28 марта 2026 потолок считают по новой формуле. Снижение бьёт дважды: новая цена ниже, а товар на складе куплен по старой.</p>
+      <div class="controls">
+        <p class="ctl"><span>Потолок = минимум из трёх цен (приказ Минздрава № 3735)</span></p>
+        <ul class="formula">
+          <li><span>Средняя цена в референтных странах</span><span class="note">выбросы &gt;50% отбрасываются</span></li>
+          <li><span>Цена в стране производства</span><span class="note">+15%</span></li>
+          <li><b>Средняя таможенная цена (CIP)</b><span class="note">за 12 месяцев</span></li>
+        </ul>
+        <p class="alert">Ловушка: скидка на закупку снижает таможенную цену, и при пересмотре потолок может опуститься вслед за ней.</p>
+      </div>
+      <div class="stats" id="mk-stats"></div>
+    </div>
+    <div class="slide-viz">
+      <div class="card">
+        <div class="card-head"><h2 class="card-title">Референтная цена ривароксабана 20 мг, $ за упаковку</h2>
+          <span class="prov" data-s="fact" id="mk-source">реестр mpa.uz</span></div>
+        <div class="chart" id="mk-chart"></div>
+        <div class="legend"><span><i class="key-line k-ours"></i>Сербан — наш пример</span><span><i class="key-line k-muted"></i>другие бренды (наведите, чтобы увидеть)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Радар -->
+  <section class="slide" id="radar" aria-labelledby="radar-title">
+    <div class="slide-text">
+      <p class="kicker">3 · Радар пересмотров · машинное обучение</p>
+      <h2 class="title" id="radar-title">Модель заранее видит, чью цену снизят</h2>
+      <p class="lead">Учится на 25 ежемесячных снимках реестра. Проверка честная: обучение на прошлом, оценка на будущем, которого модель не видела.</p>
+      <div class="controls">
+        <div class="ctl"><span>Что показать</span>
+          <div class="seg" role="group" aria-label="Режим радара" id="radar-mode">
+            <button type="button" data-v="case" aria-pressed="true">Проверка: июль 2026</button>
+            <button type="button" data-v="now" aria-pressed="false">Прогноз: сейчас</button>
+          </div>
+        </div>
+        <p class="note" id="radar-note"></p>
+      </div>
+      <div class="stats" id="radar-stats"></div>
+    </div>
+    <div class="slide-viz">
+      <div class="card">
+        <div class="card-head"><h2 class="card-title" id="radar-list-title">Вероятность пересмотра</h2>
+          <span class="prov" data-s="fact">модель обучена до даты прогноза</span></div>
+        <div class="chart" id="radar-list"></div>
+        <div class="legend" id="radar-legend"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2 class="card-title">Качество на честном тесте (ноябрь 2026), AUC</h2>
+          <span class="note">0,5 — угадывание, 1 — без ошибок</span></div>
+        <div class="chart" id="radar-seg"></div>
+        <div class="legend"><span><i class="key k-ours"></i>модель, 95% интервал</span><span><i class="key k-muted"></i>простое правило (○)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Склад -->
+  <section class="slide" id="stock" aria-labelledby="stock-title">
+    <div class="slide-text">
+      <p class="kicker">4 · Склад и дата пересмотра</p>
+      <h2 class="title" id="stock-title">Если пересмотр застанет полный склад, потеря — <span id="st-loss">…</span></h2>
+      <p class="lead" id="st-lead">…</p>
+      <div class="controls">
+        <label class="field">
+          <span class="field-label">День пересмотра <output id="rev-out" for="rev">120</output></span>
+          <input type="range" id="rev" min="20" max="340" step="5" value="120">
+        </label>
+        <p class="note">Снижение потолка на 20%. Обычно — 2 большие поставки в год; с подготовкой перед датой везут малую партию.</p>
+      </div>
+      <div class="stats" id="st-stats" aria-live="polite"></div>
+    </div>
+    <div class="slide-viz">
+      <div class="card">
+        <div class="card-head"><h2 class="card-title">Запас на складе, тыс. упаковок</h2>
+          <span class="prov" data-s="estimate">график поставок — модель</span></div>
+        <div class="chart" id="st-chart"></div>
+        <div class="legend"><span><i class="key-line k-ink"></i>как сейчас</span><span><i class="key-line k-ours"></i>с подготовкой</span><span><i class="key-line k-loss"></i>пересмотр</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. План -->
+  <section class="slide" id="plan" aria-labelledby="plan-title">
+    <div class="slide-text">
+      <p class="kicker">5 · План мер · оптимизатор</p>
+      <h2 class="title" id="plan-title">Самый дешёвый план, который даёт цель и держит риск убытка ≤ 10%</h2>
+      <div class="controls">
+        <div class="controls-row">
+          <div class="ctl"><span>Цель по марже</span>
+            <div class="seg" role="group" aria-label="Цель по марже" id="pl-target">
+              <button type="button" data-v="0.10" aria-pressed="false">10%</button>
+              <button type="button" data-v="0.15" aria-pressed="true">15%</button>
+              <button type="button" data-v="0.20" aria-pressed="false">20%</button>
+              <button type="button" data-v="0.25" aria-pressed="false">25%</button>
+            </div></div>
+          <div class="ctl"><span>Бюджет</span>
+            <div class="seg" role="group" aria-label="Бюджет" id="pl-budget">
+              <button type="button" data-v="1e9" aria-pressed="false">1 млрд</button>
+              <button type="button" data-v="3e9" aria-pressed="false">3 млрд</button>
+              <button type="button" data-v="10e9" aria-pressed="true">10 млрд</button>
+            </div></div>
+        </div>
+        <div class="controls-row">
+          <div class="ctl"><span>Вероятность пересмотра</span>
+            <div class="seg" role="group" aria-label="Вероятность пересмотра" id="pl-pcut">
+              <button type="button" data-v="radar" aria-pressed="true">по радару</button>
+              <button type="button" data-v="0.25" aria-pressed="false">25%</button>
+              <button type="button" data-v="0.6" aria-pressed="false">60%</button>
+            </div></div>
+          <label class="ctl"><span>Препарат</span><select id="pl-brand" class="btn"></select></label>
+        </div>
+        <label class="switch"><input type="checkbox" id="pl-cip"> Скидки на закупку уходят в потолок (CIP решает)</label>
+      </div>
+      <div id="pl-summary" aria-live="polite"></div>
+      <ol class="actions" id="pl-actions" aria-label="Меры плана"></ol>
+      <div class="export">
+        <button class="btn btn-primary" type="button" id="exp-pdf">Скачать PDF для руководства</button>
+        <button class="btn" type="button" id="exp-xlsx">Excel с расчётом</button>
+      </div>
+    </div>
+    <div class="slide-viz">
+      <div class="card">
+        <div class="card-head"><h2 class="card-title">Маржа за год в 2000 сценариях</h2>
+          <span class="note">курс, спрос, задержки, пересмотр</span></div>
+        <div class="chart" id="pl-hist"></div>
+        <div class="legend"><span><i class="key-line k-ink"></i>как сейчас</span><span><i class="key-line k-ours"></i>с планом</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2 class="card-title" id="pl-scatter-title">Все стратегии: вложения и маржа после пересмотра</h2></div>
+        <div class="chart" id="pl-scatter"></div>
+        <div class="legend"><span><i class="key k-good"></i>✓ проходят все правила</span><span><i class="key k-muted"></i>не проходят</span><span><i class="key k-ours"></i>выбранный план</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="legend"><span class="prov" data-s="fact">факт: источник и дата</span><span class="prov" data-s="estimate">оценка: допущение, проверить на данных импортёра</span><span class="prov" data-s="demo">демо</span></div>
+  <div>Данные: реестр mpa.uz, списки пересмотров Минздрава, курсы ЦБ РУз · <a href="/docs">API</a> · не медицинское изделие</div>
+</footer>
+
+<div class="presenter-hud" aria-live="polite"><span id="hud-text">1 / 8</span><span class="dots" id="hud-dots"></span><span>пробел →</span></div>
+</body>
+</html>

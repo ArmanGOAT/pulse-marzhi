@@ -1,0 +1,134 @@
+/* Пульс маржи — токены дизайн-системы.
+ *
+ * Цвет кодирует смысл, а не украшает: один и тот же цвет значит одно и то же на всех экранах.
+ *   --c-usd     синий    затраты и цены в долларах
+ *   --c-uzs     песочный затраты в сумах
+ *   --c-ours    фиолетовый наш препарат и наш план
+ *   --c-alt     оранжевый «готовиться»: вероятность пересмотра выше порога
+ *   --c-loss    красный  убыток, пересмотр, снижение цены   (статус, всегда с иконкой и подписью)
+ *   --c-good    зелёный  то, что останется после пересмотра (статус, всегда с иконкой и подписью)
+ *   --c-warn    жёлтый   то, что может уйти в потолок       (статус, всегда с иконкой и подписью)
+ *
+ * Палитра проверена на различимость при дальтонизме (ΔE OKLab ≥ 8) и контраст, отдельно
+ * для светлой и тёмной темы. Песочный на светлом фоне ниже 3:1 — поэтому у него всегда есть
+ * подпись и таблица (WCAG 2.2, 1.4.11).
+ */
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-2: #f3f2ee;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --ink-3: #6f6d68;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --line-muted: #b9b7ae;
+  --border: rgba(11, 11, 11, 0.10);
+  --shadow: 0 1px 2px rgba(11, 11, 11, 0.06), 0 8px 24px rgba(11, 11, 11, 0.06);
+
+  --c-usd: #2a78d6;
+  --c-usd-wash: rgba(42, 120, 214, 0.12);
+  --c-uzs: #eda100;
+  --c-uzs-wash: rgba(237, 161, 0, 0.14);
+  --c-ours: #6250d6;
+  --c-ours-wash: rgba(98, 80, 214, 0.12);
+  --c-alt: #eb6834;
+  --c-loss: #d03b3b;
+  --c-loss-wash: rgba(208, 59, 59, 0.12);
+  --c-good: #0ca30c;
+  --c-good-text: #006300;
+  --c-warn: #fab219;
+  --c-warn-text: #8a5a00;
+  --on-fill: #ffffff;
+  --on-fill-light: #0b0b0b;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --fs-xl: 28px;
+  --fs-2xl: clamp(28px, 3.2vw, 44px);
+  --fs-hero: clamp(44px, 5.4vw, 76px);
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  --focus: 0 0 0 3px var(--surface), 0 0 0 5px var(--c-ours);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --dur: 240ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-2: #232321;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --ink-3: #9d9b93;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --line-muted: #4a4945;
+    --border: rgba(255, 255, 255, 0.10);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+    --c-usd: #3987e5;
+    --c-usd-wash: rgba(57, 135, 229, 0.16);
+    --c-uzs: #c98500;
+    --c-uzs-wash: rgba(201, 133, 0, 0.18);
+    --c-ours: #9085e9;
+    --c-ours-wash: rgba(144, 133, 233, 0.16);
+    --c-alt: #d95926;
+    --c-loss: #e05252;
+    --c-loss-wash: rgba(224, 82, 82, 0.16);
+    --c-good: #0ca30c;
+    --c-good-text: #3ec43e;
+    --c-warn: #fab219;
+    --c-warn-text: #fab219;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-2: #232321;
+  --ink: #f0efec;
+  --ink-2: #c3c2b7;
+  --ink-3: #9d9b93;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --line-muted: #4a4945;
+  --border: rgba(255, 255, 255, 0.10);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+  --c-usd: #3987e5;
+  --c-usd-wash: rgba(57, 135, 229, 0.16);
+  --c-uzs: #c98500;
+  --c-uzs-wash: rgba(201, 133, 0, 0.18);
+  --c-ours: #9085e9;
+  --c-ours-wash: rgba(144, 133, 233, 0.16);
+  --c-alt: #d95926;
+  --c-loss: #e05252;
+  --c-loss-wash: rgba(224, 82, 82, 0.16);
+  --c-good: #0ca30c;
+  --c-good-text: #3ec43e;
+  --c-warn: #fab219;
+  --c-warn-text: #fab219;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0ms; }
+}

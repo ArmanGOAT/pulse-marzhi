@@ -1,0 +1,74 @@
+/* Раскладка страницы демо: верхняя панель + пять «моментов» на всю высоту экрана. */
+html { scroll-behavior: smooth; scroll-snap-type: y proximity; scroll-padding-top: 64px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.topbar {
+  position: sticky; top: 0; z-index: 20; height: 56px;
+  display: flex; align-items: center; gap: var(--sp-4); padding: 0 var(--sp-5);
+  background: color-mix(in srgb, var(--page) 86%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: var(--sp-2); font-weight: 700; white-space: nowrap; }
+.brand svg { width: 26px; height: 26px; }
+.brand .sub { font-weight: 500; color: var(--ink-3); font-size: var(--fs-sm); }
+.steps { display: flex; gap: 2px; margin-left: auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.steps a { text-decoration: none; color: var(--ink-3); font-size: var(--fs-sm); font-weight: 600; padding: 6px 10px; border-radius: var(--r-sm); white-space: nowrap; }
+.steps a:hover { color: var(--ink); background: var(--surface-2); }
+.steps a[aria-current="step"] { color: var(--ink); background: var(--surface-2); }
+.steps a span { color: var(--ink-3); margin-right: 4px; }
+.tools { display: flex; gap: var(--sp-2); }
+
+.slide {
+  min-height: calc(100svh - 56px);
+  scroll-snap-align: start;
+  display: grid; grid-template-columns: minmax(300px, 5fr) 7fr; gap: var(--sp-6);
+  align-items: center; padding: var(--sp-6) var(--sp-6);
+  max-width: 1480px; margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+}
+.slide:last-of-type { border-bottom: 0; }
+.slide > * { min-width: 0; }
+.slide-text { display: grid; gap: var(--sp-4); align-content: center; }
+.slide-viz { display: grid; gap: var(--sp-4); min-width: 0; }
+.controls { display: grid; gap: var(--sp-4); padding: var(--sp-4); border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--border); }
+.controls-row { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); align-items: center; }
+.ctl { display: grid; gap: 6px; }
+.ctl > span { font-size: var(--fs-sm); color: var(--ink-2); font-weight: 600; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+.hero-row { display: flex; align-items: flex-end; gap: var(--sp-4); flex-wrap: wrap; }
+.hero-arrow { font-size: var(--fs-2xl); color: var(--ink-3); padding-bottom: 6px; }
+.export { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+
+.loss-text { color: var(--c-loss); }
+.good-text { color: var(--c-good-text); }
+.ours-text { color: var(--c-ours); }
+
+.footer { max-width: 1480px; margin: 0 auto; padding: var(--sp-5) var(--sp-6) var(--sp-7); display: flex; gap: var(--sp-4); flex-wrap: wrap; justify-content: space-between; color: var(--ink-3); font-size: var(--fs-sm); }
+.footer .legend { color: var(--ink-3); }
+
+/* режим презентации: пробел и стрелки ведут по сценарию */
+.presenter-hud { position: fixed; right: var(--sp-5); bottom: var(--sp-5); z-index: 30; display: none; align-items: center; gap: var(--sp-3); padding: 8px 14px; border-radius: var(--r-pill); background: var(--ink); color: var(--page); font-size: var(--fs-sm); font-weight: 600; box-shadow: var(--shadow); }
+body.presenting .presenter-hud { display: flex; }
+.presenter-hud .dots { display: flex; gap: 4px; }
+.presenter-hud .dots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .3; }
+.presenter-hud .dots i.on { opacity: 1; }
+.pulse-on { animation: pulse 1.2s var(--ease) 1; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--c-ours-wash); } 50% { box-shadow: 0 0 0 10px var(--c-ours-wash); } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+@media (max-width: 1100px) {
+  .slide { grid-template-columns: 1fr; padding: var(--sp-6) var(--sp-4); align-items: start; }
+  .split { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .topbar { padding: 0 var(--sp-4); gap: var(--sp-2); }
+  .brand .sub, .steps a b, #present { display: none; }
+  .brand > span:not(.sub) { display: none; }
+  .hero-row { gap: var(--sp-3); }
+  .card { padding: var(--sp-4); }
+  .bar-row { grid-template-columns: minmax(90px, 38%) 1fr auto; }
+}
+@media print {
+  .topbar, .presenter-hud, .controls, .export { display: none !important; }
+  .slide { min-height: auto; break-inside: avoid; }
+}
