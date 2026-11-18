@@ -6,6 +6,8 @@
 - Разбор задачи по шагам: [docs/zadacha16.html](docs/zadacha16.html)
 - Стандарты: [docs/STANDARDS.md](docs/STANDARDS.md)
 - Архитектурные решения: [docs/adr/](docs/adr/)
+- Карточка модели: [docs/model_card.md](docs/model_card.md), паспорт данных: [docs/datasheet.md](docs/datasheet.md), риски: [docs/RISKS.md](docs/RISKS.md)
+- Дизайн-система: [docs/design-system.md](docs/design-system.md), сценарий демо на 2 минуты: [docs/demo-script.md](docs/demo-script.md)
 
 ## Быстрый старт
 
@@ -13,7 +15,32 @@
 make setup    # окружение .venv и зависимости с точными версиями
 make test     # тесты-инварианты
 make lint     # проверка стиля (ruff)
+make serve    # API и страница демо
 ```
+
+## Демо
+
+```bash
+make serve    # http://localhost:8000 — страница демо, http://localhost:8000/docs — схема API (OpenAPI)
+```
+
+Пять экранов на живых данных: экономика упаковки и курс, история цен ривароксабана по реестру,
+радар пересмотров (проверка на прошлой волне и прогноз на сейчас), склад в день пересмотра, план мер
+с риском и облаком стратегий. Кнопка «▶ Показ» или клавиша `P` включает режим презентации:
+пробел ведёт по сценарию. План выгружается в PDF для руководства и в Excel с расчётом.
+
+API: `GET /api/pack`, `POST /api/ceiling`, `GET /api/market/rivaroxaban`, `GET /api/radar`,
+`GET /api/stock`, `POST /api/plan`, `POST /api/export/{pdf|xlsx}`.
+
+## Docker
+
+```bash
+docker compose up --build   # то же демо на http://localhost:8000, без интернета
+```
+
+Образ берёт данные и отчёты экспериментов из рабочей папки, поэтому в свежем клоне сначала
+выполните `make setup && make data && make train`. Сервер внутри работает от непривилегированного
+пользователя и отдаёт состояние на `/api/health`.
 
 ## Данные и обучение
 
