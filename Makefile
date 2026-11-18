@@ -1,6 +1,6 @@
 PY := PYTHONPATH=src .venv/bin/python
 
-.PHONY: setup test lint fmt data train runs
+.PHONY: setup test lint fmt data train runs serve
 
 setup:
 	python3.12 -m venv .venv
@@ -27,3 +27,6 @@ train:
 
 runs:
 	$(PY) -m pulse.ml.experiments
+
+serve:  ## API и интерфейс демо: http://localhost:8000 (схема API: /docs)
+	$(PY) -m uvicorn pulse.api.main:app --port 8000
