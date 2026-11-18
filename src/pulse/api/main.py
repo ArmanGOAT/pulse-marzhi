@@ -12,14 +12,15 @@ import threading
 from contextlib import asynccontextmanager
 from datetime import date
 from functools import lru_cache
+from urllib.parse import quote
 
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from pulse import __version__
+from pulse import __version__, products
 from pulse.config import ROOT, load_assumptions, load_levers
 from pulse.data import registry
 from pulse.decision.optimizer import Inputs, optimize
@@ -56,6 +57,7 @@ def _warm() -> None:
         return
     with contextlib.suppress(Exception):  # прогрев не должен ронять сервер
         rivaroxaban_history()
+        products.catalog()
 
 
 @asynccontextmanager
@@ -274,6 +276,41 @@ def export(fmt: str, body: PlanIn) -> Response:
         return Response(report.xlsx_bytes(res, body.brand),
                         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         headers={"Content-Disposition": f'attachment; filename="plan-{stamp}.xlsx"'})
+    raise HTTPException(404, "Формат: pdf или xlsx")
+
+
+# ---------- проверка любого препарата: поиск, карточка, отчёт ----------
+
+def _need_catalog() -> None:
+    if not registry.snapshot_dates():
+        raise HTTPException(503, "Нет снимков реестра mpa.uz. Выполните make data (нужен интернет) и перезапустите сервер.")
+
+
+@app.get("/api/products")
+def products_search(q: str = "", limit: int = Query(20, ge=1, le=50)) -> dict:
+    _need_catalog()
+    return {"query": q, "results": products.search(q, limit)}
+
+
+@app.get("/api/products/{pid}")
+def product_card(pid: str) -> dict:
+    _need_catalog()
+    card = products.card(pid)
+    if card is None:
+        raise HTTPException(404, "Препарат не найден")
+    return _clean(card)
+
+
+@app.get("/api/products/{pid}/report/{fmt}")
+def product_report(pid: str, fmt: str) -> Response:
+    card = product_card(pid)
+    safe = quote(f"Пульс маржи — {card['title']} {card['strength']}.{fmt}")
+    disp = f"attachment; filename=\"pulse-report.{fmt}\"; filename*=UTF-8''{safe}"
+    if fmt == "pdf":
+        return Response(report.product_pdf_bytes(card), media_type="application/pdf", headers={"Content-Disposition": disp})
+    if fmt == "xlsx":
+        return Response(report.product_xlsx_bytes(card), headers={"Content-Disposition": disp},
+                        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     raise HTTPException(404, "Формат: pdf или xlsx")
 
 

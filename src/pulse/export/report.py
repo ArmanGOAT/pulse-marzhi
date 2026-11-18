@@ -174,3 +174,129 @@ def xlsx_bytes(res: Result, brand: str) -> bytes:
     buf = io.BytesIO()
     wb.save(buf)
     return buf.getvalue()
+
+
+# ---------- отчёт по одному препарату (страница «Проверить препарат») ----------
+
+def _pdf() -> tuple[FPDF, float]:
+    pdf = FPDF(format="A4")
+    pdf.add_font("DejaVu", "", str(FONTS / "DejaVuSans.ttf"))
+    pdf.add_font("DejaVu", "B", str(FONTS / "DejaVuSans-Bold.ttf"))
+    pdf.set_auto_page_break(True, margin=15)
+    pdf.add_page()
+    return pdf, pdf.w - pdf.l_margin - pdf.r_margin
+
+
+def product_pdf_bytes(c: dict) -> bytes:
+    pdf, w = _pdf()
+    nl = {"new_x": "LMARGIN", "new_y": "NEXT", "align": "L"}
+    pdf.set_font("DejaVu", "B", 18)
+    pdf.multi_cell(w, 9, c["title"], **nl)
+    pdf.set_font("DejaVu", "", 10)
+    pdf.multi_cell(w, 5, f"{c['subtitle']} · {c['manufacturer']}", **nl)
+    pdf.multi_cell(w, 5, f"Прогноз на ближайшую волну пересмотра цен · данные госреестра mpa.uz на {c['asof']}", **nl)
+    pdf.ln(4)
+
+    pdf.set_font("DejaVu", "B", 16)
+    pdf.multi_cell(w, 8, f"{c['level_label']}: {c['p_cut']:.0%}", **nl)
+    pdf.set_font("DejaVu", "", 11)
+    pdf.multi_cell(w, 6, c["meaning"], **nl)
+    pdf.ln(2)
+    pdf.set_font("DejaVu", "B", 11)
+    pdf.multi_cell(w, 6, "Что делать", **nl)
+    pdf.set_font("DejaVu", "", 11)
+    pdf.multi_cell(w, 6, c["todo"], **nl)
+    pdf.ln(2)
+    pdf.set_font("DejaVu", "B", 11)
+    pdf.multi_cell(w, 6, "Почему так", **nl)
+    pdf.set_font("DejaVu", "", 10)
+    for r in c["reasons"]:
+        pdf.multi_cell(w, 5.5, f"• {r}", **nl)
+    pdf.ln(3)
+
+    pdf.set_font("DejaVu", "B", 11)
+    pdf.multi_cell(w, 6, "О препарате", **nl)
+    pdf.set_font("DejaVu", "", 10)
+    facts = [("Действующее вещество", c["inn"]), ("Форма и дозировка", f"{c['form']} {c['strength']}".strip()),
+             ("Производитель", c["manufacturer"]), ("Страна", c["country"] or "—"),
+             ("Регистрационный номер", c["reg_number"] or "—"), ("Референтная цена сейчас", c["price"]),
+             ("Аналогов той же дозы в реестре", str(c["peers_n"]))]
+    for k, v in facts:
+        pdf.set_font("DejaVu", "B", 9)
+        pdf.cell(w * 0.38, 6, k, border=1)
+        pdf.set_font("DejaVu", "", 9)
+        pdf.cell(w * 0.62, 6, str(v)[:70], border=1, **nl)
+    pdf.ln(3)
+
+    if c["history"]:
+        pdf.set_font("DejaVu", "B", 11)
+        pdf.multi_cell(w, 6, "История референтной цены", **nl)
+        pdf.set_font("DejaVu", "", 9)
+        changes, prev = [], None
+        for h in c["history"]:
+            if prev is None or h["price"] != prev:
+                changes.append(h)
+            prev = h["price"]
+        for h in changes:
+            pdf.cell(w * 0.3, 5.5, h["date"], border=1)
+            pdf.cell(w * 0.3, 5.5, f"{h['price']:,.2f} {h['currency']}".replace(",", " ").replace(".", ","), border=1, **nl)
+        pdf.set_font("DejaVu", "", 8)
+        pdf.multi_cell(w, 4.5, f"Показаны только даты, когда цена менялась; всего снимков: {len(c['history'])}.", **nl)
+        pdf.ln(3)
+
+    if c["peers"]:
+        pdf.set_font("DejaVu", "B", 11)
+        pdf.multi_cell(w, 6, "Аналоги той же дозы: риск пересмотра", **nl)
+        cols = [w * 0.28, w * 0.4, w * 0.16, w * 0.16]
+        pdf.set_font("DejaVu", "B", 8)
+        for t, cw in zip(("Бренд", "Производитель", "Цена", "Риск"), cols, strict=True):
+            pdf.cell(cw, 6, t, border=1)
+        pdf.ln()
+        pdf.set_font("DejaVu", "", 8)
+        for p in c["peers"]:
+            for t, cw in zip((p["title"][:28], p["manufacturer"][:42], p["price"], f"{p['p_cut']:.0%}"), cols, strict=True):
+                pdf.cell(cw, 5.5, t, border=1)
+            pdf.ln()
+        pdf.ln(3)
+
+    pdf.set_font("DejaVu", "", 8)
+    pdf.multi_cell(w, 4.5, c["method"], **nl)
+    return bytes(pdf.output())
+
+
+def product_xlsx_bytes(c: dict) -> bytes:
+    wb = Workbook()
+    head, fill = Font(bold=True), PatternFill("solid", fgColor="DDE6FA")
+    ws = wb.active
+    ws.title = "Итог"
+    rows = [("Препарат", c["title"]), ("Описание", c["subtitle"]), ("Производитель", c["manufacturer"]),
+            ("Дата данных", c["asof"]), ("Уровень риска", c["level_label"]), ("Вероятность пересмотра", c["p_cut"]),
+            ("Что это значит", c["meaning"]), ("Что делать", c["todo"]),
+            *[("Почему так", r) for r in c["reasons"]],
+            ("Референтная цена", c["price"]), ("Регистрационный номер", c["reg_number"]),
+            ("Аналогов той же дозы", c["peers_n"]), ("Как считается", c["method"])]
+    for k, v in rows:
+        ws.append([k, v])
+        ws.cell(ws.max_row, 1).font = head
+    ws["B6"].number_format = "0%"
+    ws2 = wb.create_sheet("История цены")
+    ws2.append(["Дата", "Референтная цена", "Валюта"])
+    for h in c["history"]:
+        ws2.append([h["date"], h["price"], h["currency"]])
+    ws3 = wb.create_sheet("Аналоги")
+    ws3.append(["Бренд", "Производитель", "Цена", "Вероятность пересмотра", "Уровень риска"])
+    for p in c["peers"]:
+        ws3.append([p["title"], p["manufacturer"], p["price"], p["p_cut"], p["level_label"]])
+        ws3.cell(ws3.max_row, 4).number_format = "0%"
+    for sheet in wb.worksheets:
+        if sheet.title != "Итог":
+            for cell in sheet[1]:
+                cell.font, cell.fill = head, fill
+        for i, col in enumerate(sheet.columns, start=1):
+            sheet.column_dimensions[get_column_letter(i)].width = min(80, max(12, max(len(str(x.value or "")) for x in col) + 2))
+        for row in sheet.iter_rows():
+            for x in row:
+                x.alignment = Alignment(wrap_text=True, vertical="top")
+    buf = io.BytesIO()
+    wb.save(buf)
+    return buf.getvalue()

@@ -24,3 +24,10 @@ def test_assets_exist_and_are_local():
         assert client.get(f"/{u.lstrip('/')}").status_code == 200, u
     for js in ("js/charts.js", "js/fmt.js"):
         assert client.get(f"/{js}").status_code == 200
+
+
+def test_check_page_served_and_local():
+    r = client.get("/check.html")
+    assert r.status_code == 200 and "Снизят ли цену" in r.text and "default-src 'self'" in r.text
+    for u in ("js/check.js", "css/check.css"):
+        assert client.get(f"/{u}").status_code == 200

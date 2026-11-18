@@ -56,3 +56,19 @@ def test_missing_data_gives_clear_messages(monkeypatch):
     monkeypatch.setattr(main, "data_status", lambda: {"ready": False, "radar_scores": False, "missing": ["x"]})
     plan = client.post("/api/plan", json=BODY).json()
     assert plan["warnings"] and "make train" in plan["warnings"][0]
+
+
+def test_product_search_card_and_reports():
+    """Страница «Проверить препарат»: поиск находит бренд, карточка простым языком, отчёты открываются."""
+    found = client.get("/api/products", params={"q": "сербан"}).json()["results"]
+    assert found and all("Сербан" in r["title"] for r in found)
+    pid = next(r["id"] for r in found if "20мг" in r["subtitle"])
+    card = client.get(f"/api/products/{pid}").json()
+    assert card["level"] in {"low", "mid", "high"} and card["reasons"] and card["todo"] and card["history"]
+    assert 0 <= card["p_cut"] <= 1
+    pdf = client.get(f"/api/products/{pid}/report/pdf")
+    assert pdf.status_code == 200 and pdf.content.startswith(b"%PDF")
+    xlsx = client.get(f"/api/products/{pid}/report/xlsx")
+    assert {"Итог", "История цены", "Аналоги"} <= set(load_workbook(io.BytesIO(xlsx.content)).sheetnames)
+    assert client.get("/api/products/unknown").status_code == 404
+    assert client.get("/api/products", params={"q": "x"}).json()["results"] == []

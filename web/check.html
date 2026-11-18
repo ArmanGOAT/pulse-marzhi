@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="description" content="Проверьте, снизят ли цену на ваш препарат: прогноз пересмотра цен по госреестру Узбекистана">
+  <title>Проверить препарат — Пульс маржи</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236250d6'/%3E%3Cpath d='M5 17h6l3-7 4 13 3-6h6' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="ds/tokens.css">
+  <link rel="stylesheet" href="ds/components.css">
+  <link rel="stylesheet" href="css/check.css">
+  <script type="module" src="js/check.js"></script>
+</head>
+<body>
+<header class="ck-top">
+  <a class="ck-brand" href="check.html">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" class="ck-logo"/><path d="M5 17h6l3-7 4 13 3-6h6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Пульс маржи
+  </a>
+  <a class="ck-link" href="index.html">Полное демо →</a>
+</header>
+
+<main class="ck-main">
+  <section class="ck-hero" aria-labelledby="ck-h1">
+    <h1 id="ck-h1">Снизят ли цену на ваш препарат?</h1>
+    <p class="ck-lead">Введите название препарата или действующее вещество. Мы покажем, насколько вероятно,
+      что государство снизит его цену в ближайшие месяцы, и что с этим делать.</p>
+
+    <label class="ck-label" for="ck-q">Название препарата</label>
+    <input id="ck-q" class="ck-input" type="search" autocomplete="off" spellcheck="false"
+           placeholder="Например: Сербан" aria-describedby="ck-examples" aria-controls="ck-results">
+    <p class="ck-examples" id="ck-examples">Попробуйте:
+      <button type="button" class="ck-example">Сербан</button>
+      <button type="button" class="ck-example">Ксарелто</button>
+      <button type="button" class="ck-example">амлодипин</button>
+    </p>
+    <p class="ck-status" id="ck-status" role="status" aria-live="polite"></p>
+    <ul class="ck-results" id="ck-results"></ul>
+  </section>
+
+  <section class="ck-card" id="ck-card" hidden aria-live="polite"></section>
+
+  <section class="ck-how" aria-labelledby="ck-how-h">
+    <h2 id="ck-how-h">Как это работает</h2>
+    <ol>
+      <li><b>Данные.</b> Каждый месяц мы сохраняем государственный реестр цен на лекарства (mpa.uz) — около 13 000 упаковок.</li>
+      <li><b>Прогноз.</b> Модель обучена на прошлых пересмотрах и оценивает, чью цену снизят в следующую волну.</li>
+      <li><b>Совет.</b> Риск переводится в простое действие: готовиться или нет, и как.</li>
+    </ol>
+    <p class="note">Это прогноз, а не решение регулятора. Данные на 17.11.2026.</p>
+  </section>
+</main>
+</body>
+</html>

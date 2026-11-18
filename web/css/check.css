@@ -1,0 +1,73 @@
+/* Страница «Проверить препарат»: одна колонка, крупный шрифт, минимум элементов. */
+.ck-top { display: flex; justify-content: space-between; align-items: center; padding: var(--sp-4) var(--sp-5); max-width: 760px; margin: 0 auto; }
+.ck-brand { display: inline-flex; align-items: center; gap: var(--sp-2); font-weight: 700; color: var(--ink); text-decoration: none; }
+.ck-brand svg { width: 28px; height: 28px; }
+.ck-logo { fill: var(--c-ours); }
+.ck-link { color: var(--ink-2); font-size: var(--fs-sm); }
+.ck-main { max-width: 760px; margin: 0 auto; padding: 0 var(--sp-5) var(--sp-8); display: grid; gap: var(--sp-6); }
+
+.ck-hero h1 { font-size: clamp(28px, 4.5vw, 40px); line-height: 1.15; margin: var(--sp-5) 0 var(--sp-3); letter-spacing: -.01em; }
+.ck-lead { font-size: var(--fs-lg); color: var(--ink-2); margin-bottom: var(--sp-5); }
+.ck-label { display: block; font-weight: 600; margin-bottom: var(--sp-2); }
+.ck-input { width: 100%; font-size: 20px; padding: 14px 16px; border-radius: var(--r-md); border: 2px solid var(--axis); background: var(--surface); color: var(--ink); }
+.ck-input:focus { outline: none; border-color: var(--c-ours); box-shadow: 0 0 0 4px var(--c-ours-wash); }
+.ck-examples { margin-top: var(--sp-2); color: var(--ink-3); font-size: var(--fs-sm); display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+.ck-example { border: 1px solid var(--border); background: var(--surface); border-radius: var(--r-pill); padding: 4px 12px; cursor: pointer; font-size: var(--fs-sm); color: var(--ink-2); }
+.ck-example:hover { background: var(--surface-2); }
+.ck-status { margin-top: var(--sp-3); color: var(--ink-3); font-size: var(--fs-sm); min-height: 1.5em; }
+
+.ck-results { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
+.ck-result { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--sp-3); text-align: left; padding: var(--sp-3) var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--border); background: var(--surface); cursor: pointer; }
+.ck-result:hover, .ck-result:focus-visible { border-color: var(--c-ours); }
+.ck-result b { display: block; font-size: var(--fs-md); }
+.ck-result span.sub { color: var(--ink-3); font-size: var(--fs-sm); }
+
+/* уровень риска: цвет всегда вместе со словом и значком */
+.risk { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: var(--r-pill); font-weight: 700; font-size: var(--fs-sm); white-space: nowrap; }
+.risk::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+.risk-high { color: var(--c-loss); background: var(--c-loss-wash); }
+.risk-mid { color: var(--c-warn-text); background: color-mix(in srgb, var(--c-warn) 18%, transparent); }
+.risk-low { color: var(--c-good-text); background: color-mix(in srgb, var(--c-good) 14%, transparent); }
+
+.ck-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: var(--sp-6); display: grid; gap: var(--sp-5); }
+.ck-card h2 { font-size: var(--fs-xl); margin: 0; }
+.ck-card .sub { color: var(--ink-3); margin-top: 4px; }
+.ck-verdict { display: grid; gap: var(--sp-3); }
+.ck-verdict .big { font-size: clamp(26px, 4vw, 34px); font-weight: 700; }
+.ck-verdict .big.high { color: var(--c-loss); } .ck-verdict .big.mid { color: var(--c-warn-text); } .ck-verdict .big.low { color: var(--c-good-text); }
+
+/* шкала из трёх зон с отметкой */
+.scale { position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; margin-top: var(--sp-2); }
+.scale div { height: 12px; border-radius: 3px; }
+.scale .z-low { background: color-mix(in srgb, var(--c-good) 35%, transparent); }
+.scale .z-mid { background: color-mix(in srgb, var(--c-warn) 45%, transparent); }
+.scale .z-high { background: color-mix(in srgb, var(--c-loss) 40%, transparent); }
+.scale-labels { display: grid; grid-template-columns: 1fr 1fr 1fr; font-size: var(--fs-xs); color: var(--ink-3); margin-top: 4px; }
+.scale-labels span:nth-child(2) { text-align: center; } .scale-labels span:nth-child(3) { text-align: right; }
+.marker { position: absolute; top: -6px; width: 4px; height: 24px; border-radius: 2px; background: var(--ink); transform: translateX(-2px); }
+
+.ck-todo { background: var(--c-ours-wash); border-radius: var(--r-md); padding: var(--sp-4); }
+.ck-todo h3, .ck-block h3 { font-size: var(--fs-md); margin: 0 0 var(--sp-2); }
+.ck-block ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--sp-2); }
+.ck-compare { display: grid; gap: var(--sp-2); font-size: var(--fs-sm); }
+.ck-compare .row { display: grid; grid-template-columns: minmax(150px, 40%) 1fr auto; gap: var(--sp-3); align-items: center; }
+.ck-compare .bar { height: 12px; border-radius: 0 4px 4px 0; background: var(--line-muted); }
+.ck-compare .bar.ours { background: var(--c-ours); }
+.ck-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: var(--sp-2) var(--sp-4); margin: 0; }
+.ck-facts dt { color: var(--ink-3); font-size: var(--fs-xs); }
+.ck-facts dd { margin: 0; font-weight: 600; }
+.ck-peers { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ck-peers button { width: 100%; display: flex; justify-content: space-between; gap: var(--sp-3); align-items: center; background: none; border: 0; border-bottom: 1px solid var(--grid); padding: 6px 0; cursor: pointer; text-align: left; color: var(--ink); }
+.ck-peers button:hover { color: var(--c-ours); }
+.ck-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.ck-actions .btn { font-size: var(--fs-md); padding: 12px 20px; text-decoration: none; color: var(--ink); }
+.ck-actions .btn-primary { color: var(--page); }
+.ck-how { color: var(--ink-2); }
+.ck-how h2 { font-size: var(--fs-lg); color: var(--ink); margin-bottom: var(--sp-2); }
+.ck-how ol { padding-left: 1.2em; display: grid; gap: var(--sp-2); margin: 0 0 var(--sp-3); }
+
+@media (max-width: 640px) {
+  .ck-top, .ck-main { padding-left: var(--sp-4); padding-right: var(--sp-4); }
+  .ck-card { padding: var(--sp-4); }
+  .ck-result { flex-direction: column; align-items: flex-start; }
+}
