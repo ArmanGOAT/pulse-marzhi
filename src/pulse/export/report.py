@@ -46,6 +46,128 @@ def _summary_rows(res: Result) -> list[tuple[str, str, str]]:
     ]
 
 
+FREQ = {1: "раз в год", 2: "раз в полгода", 3: "раз в 4 месяца", 4: "раз в 3 месяца", 6: "раз в 2 месяца", 12: "каждый месяц"}
+
+
+def _bn_words(x: float) -> str:
+    return f"{_bn(x)} сум" if abs(x) >= 1e9 else f"{x / 1e6:,.0f} млн сум".replace(",", " ")
+
+
+def _lower_first(s: str) -> str:
+    return s[:1].lower() + s[1:]
+
+
+def _steps(res: Result) -> list[tuple[int, str, float]]:
+    """Меры оптимизатора → конкретные шаги «что сделать»: (через сколько месяцев готово, текст, вложения)."""
+
+    from pulse.config import load_levers
+    a, lv = load_assumptions(), load_levers()
+    levers = res.plan["levers"]
+    out = []
+    for act in res.actions:
+        k = act["kind"]
+        if k == "shipments":
+            n = int(levers["shipments"])
+            batch = a.v("market.annual_volume") / n
+            weeks = max(1, round(a.v(f"costs.transit_months_{levers['mode']}") * 4.3))
+            text = (f"Заказывать у завода по {batch:,.0f} упаковок {FREQ.get(n, f'{n} раз в год')}. "
+                    f"Отправлять заказ за {weeks} нед. до нужной даты прихода.").replace(",", " ")
+        elif k == "procurement":
+            o = lv.procurement[levers["procurement"]]
+            text = (f"Договориться с 2–3 другими импортёрами о совместной закупке и получить у завода скидку {o.discount:.0%}."
+                    if levers["procurement"] == "joint" else
+                    f"Подписать с заводом годовой контракт со скидкой {o.discount:.0%} и оплатой вперёд.")
+        elif k == "pooled":
+            text = "Отправлять груз вместе с другими импортёрами: доставка дешевле на 30%, оформление — на 50%."
+        elif k == "mode":
+            text = f"Перевозить груз так: {_lower_first(lv.modes[levers['mode']].label)}."
+        elif k == "digital":
+            text = f"Перевести {levers['digital']:.0%} встреч с врачами в онлайн. Начать с пилота в части регионов."
+        elif k == "loc":
+            text = f"Запустить: {_lower_first(lv.localization[levers['loc']].label)}. Сюда входит перерегистрация."
+        elif k == "prepare":
+            from datetime import timedelta
+            months_ru = ["январе", "феврале", "марте", "апреле", "мае", "июне", "июле", "августе", "сентябре",
+                         "октябре", "ноябре", "декабре"]
+            wave = date.today() + timedelta(days=30 * int(res.inputs.get("revision_month") or 3))
+            text = (f"Ожидаемая волна пересмотра цен — примерно в {months_ru[wave.month - 1]} {wave.year}. "
+                    "За 2 месяца до неё заказывать партии не больше чем на месяц продаж; большую партию — после волны.")
+        elif k == "protect":
+            text = "Добавить в контракт с заводом пункт о защите цены: " + act["text"].split(":", 1)[-1].strip()
+        else:
+            text = act["text"]
+        out.append((int(act["months"]), text, float(act["invest"])))
+    return sorted(out, key=lambda x: x[0])
+
+
+def _action_page(pdf: FPDF, w: float, res: Result, brand: str) -> None:
+    """Первая страница плана: только действия с датами и количествами, без процентов и терминов."""
+    from datetime import timedelta
+    a = load_assumptions()
+    today = date.today()
+    nl = {"new_x": "LMARGIN", "new_y": "NEXT", "align": "L"}
+    pdf.set_font("DejaVu", "B", 20)
+    pdf.multi_cell(w, 10, f"Что сделать — {brand}", **nl)
+    pdf.set_font("DejaVu", "", 9)
+    pdf.multi_cell(w, 5, f"Обновлено: {today.strftime('%d.%m.%Y')}. Отмечайте выполненное галочкой.", **nl)
+    pdf.ln(3)
+    if not res.feasible:
+        pdf.set_text_color(208, 59, 59)
+        pdf.set_font("DejaVu", "B", 11)
+        pdf.multi_cell(w, 6, "Внимание: в этом бюджете нельзя достичь цели без риска. Ниже — лучший доступный план.", **nl)
+        pdf.set_text_color(0, 0, 0)
+        pdf.ln(2)
+
+    for months, text, invest in _steps(res):
+        when = "Сразу" if months == 0 else f"До {(today + timedelta(days=30 * months)).strftime('%d.%m.%Y')}"
+        y = pdf.get_y()
+        if y > pdf.h - 40:
+            pdf.add_page()
+            y = pdf.get_y()
+        pdf.rect(pdf.l_margin, y + 1.2, 4.5, 4.5)  # квадрат для галочки
+        pdf.set_xy(pdf.l_margin + 8, y)
+        pdf.set_font("DejaVu", "B", 11)
+        pdf.cell(36, 7, when)
+        pdf.set_xy(pdf.l_margin + 46, y)
+        pdf.set_font("DejaVu", "", 11)
+        pdf.multi_cell(w - 46, 6.5, text, **nl)
+        if invest > 0:
+            pdf.set_x(pdf.l_margin + 46)
+            pdf.set_font("DejaVu", "", 9)
+            pdf.multi_cell(w - 46, 5, f"Вложения: {_bn_words(invest)}", **nl)
+        pdf.ln(3)
+
+    safety = a.v("costs.safety_stock_min_months") * a.v("market.annual_volume") / 12
+    pdf.ln(2)
+    pdf.set_font("DejaVu", "B", 12)
+    pdf.multi_cell(w, 7, "НЕЛЬЗЯ", **nl)
+    pdf.set_font("DejaVu", "", 11)
+    pdf.multi_cell(w, 6, f"• Держать на складе меньше {safety:,.0f} упаковок — это месяц продаж. "
+                         "Иначе пациенты могут остаться без лекарства.".replace(",", " "), **nl)
+    if any(not act["durable"] for act in res.actions):
+        pdf.multi_cell(w, 6, "• Считать скидку завода прибылью навсегда: при пересмотре цены она может уйти в новый потолок.", **nl)
+
+    pdf.ln(2)
+    pdf.set_font("DejaVu", "B", 12)
+    pdf.multi_cell(w, 7, "СТОП-СИГНАЛ", **nl)
+    pdf.set_font("DejaVu", "", 11)
+    pdf.multi_cell(w, 6, "Если на странице «Проверить препарат» у этого препарата появится «высокий риск» "
+                         "(обновляется раз в месяц) — за 2 месяца до волны пересмотра заказывайте партии "
+                         "не больше чем на месяц продаж и свяжитесь с заводом о защите цены.", **nl)
+
+    cu, pl = res.current, res.plan
+    pdf.ln(4)
+    pdf.set_font("DejaVu", "B", 12)
+    pdf.multi_cell(w, 7, "ИТОГ", **nl)
+    pdf.set_font("DejaVu", "", 11)
+    pdf.multi_cell(w, 6, f"Вложить {_bn_words(pl['invest'])}. Прибыль за обычный год: было {_bn_words(cu['profit_p10_p50_p90'][1])}, "
+                         f"станет {_bn_words(pl['profit_p10_p50_p90'][1])}. Убыточных лет: было {cu['p_loss'] * 100:.0f} из 100, "
+                         f"станет {pl['p_loss'] * 100:.0f} из 100.", **nl)
+    pdf.ln(3)
+    pdf.set_font("DejaVu", "", 8)
+    pdf.multi_cell(w, 4.5, "Подробный расчёт, сравнение и допущения — на следующей странице.", **nl)
+
+
 def pdf_bytes(res: Result, brand: str) -> bytes:
     pdf = FPDF(format="A4")
     pdf.add_font("DejaVu", "", str(FONTS / "DejaVuSans.ttf"))
@@ -53,6 +175,8 @@ def pdf_bytes(res: Result, brand: str) -> bytes:
     pdf.set_auto_page_break(True, margin=15)
     pdf.add_page()
     w = pdf.w - pdf.l_margin - pdf.r_margin
+    _action_page(pdf, w, res, brand)
+    pdf.add_page()
 
     pdf.set_font("DejaVu", "B", 16)
     pdf.multi_cell(w, 8, f"План защиты маржи: {brand}", new_x="LMARGIN", new_y="NEXT")
