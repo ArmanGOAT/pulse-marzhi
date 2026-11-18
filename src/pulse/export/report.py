@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import io
 from datetime import date
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 import pandas as pd
@@ -23,7 +24,9 @@ STATUS_RU = {"fact": "факт", "estimate": "оценка", "demo": "демо-�
 
 
 def _bn(x: float) -> str:
-    return f"{x / 1e9:,.2f} млрд".replace(",", " ").replace(".", ",")
+    # округление половины вверх, как на странице (Intl): 0,975 млрд → 0,98, а не 0,97 из-за двоичной записи
+    v = Decimal(repr(round(x / 1e9, 9))).quantize(Decimal("0.01"), ROUND_HALF_UP)
+    return f"{v:,.2f} млрд".replace(",", " ").replace(".", ",")
 
 
 def _pct(x: float) -> str:
