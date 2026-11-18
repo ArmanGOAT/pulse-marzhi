@@ -9,7 +9,7 @@ import json
 
 import pandas as pd
 
-from pulse.data import store
+from pulse.data import registry, store
 from pulse.data.loaders import cbu, market
 
 
@@ -22,6 +22,9 @@ def build(offline: bool = False) -> dict[str, dict]:
     passports["drugs"] = store.save(market.drugs(), "drugs")
     passports["prices"] = store.save(market.prices(), "prices")
     passports["fx_stats"] = cbu.annual_stats(fx)
+    if registry.snapshot_dates():  # панель реестра: собрать заранее, чтобы сервер стартовал быстро
+        registry.panel.cache_clear()
+        passports["registry_panel"] = {"rows": len(registry.panel()), "path": str(registry.PANEL_CACHE)}
     return passports
 
 

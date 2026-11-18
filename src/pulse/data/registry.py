@@ -8,14 +8,19 @@
 """
 from __future__ import annotations
 
+import contextlib
+import hashlib
+import json
 import re
+from datetime import UTC, datetime
 from functools import lru_cache
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 from pulse.config import ROOT
-from pulse.data.loaders import cbu
+from pulse.data.loaders import cbu, mpa_api
 from pulse.data.loaders.mpa_api import RAW, load_snapshot
 
 CURRENCY = {"dollar": "USD", "evro": "EUR", "rubl": "RUB", "so'm": "UZS"}
@@ -97,9 +102,56 @@ def _rate_on(fx: pd.DataFrame, when: pd.Timestamp) -> pd.Series:
     return fx.loc[:when].iloc[-1] if (fx.index <= when).any() else fx.iloc[0]
 
 
+PROCESSED = ROOT / "data" / "processed"
+PANEL_CACHE = PROCESSED / "registry_panel.parquet"
+
+
+def _fingerprint() -> str:
+    """SHA-256 содержимого снимков реестра, курсов ЦБ и кода разбора.
+
+    Меняется, если добавили снимок, обновили курс или поправили разбор, — тогда панель пересобирается.
+    Время изменения файлов не используем: Docker и git его не сохраняют.
+    """
+    h = hashlib.sha256()
+    files = sorted(RAW.glob("registry_*.jsonl.gz")) + sorted(cbu.RAW.glob("*.json"))
+    for f in [*files, Path(__file__), Path(mpa_api.__file__), Path(cbu.__file__)]:
+        h.update(f.name.encode())
+        h.update(f.read_bytes())
+    return h.hexdigest()
+
+
 @lru_cache(maxsize=1)
 def panel() -> pd.DataFrame:
-    """Все снимки в одной таблице с нормализованными полями."""
+    """Все снимки в одной таблице. Сборка из сырых снимков занимает ~20 с, поэтому результат
+    хранится в data/processed/registry_panel.parquet с паспортом и берётся оттуда, пока
+    отпечаток исходных файлов и кода совпадает."""
+    fp = _fingerprint()
+    meta_path = PANEL_CACHE.with_suffix(".meta.json")
+    with contextlib.suppress(OSError, ValueError, KeyError):
+        if json.loads(meta_path.read_text(encoding="utf-8"))["fingerprint"] == fp:
+            return pd.read_parquet(PANEL_CACHE)
+    p = build_panel()
+    with contextlib.suppress(OSError):  # нет прав на запись — работаем без кэша
+        _save_cache(p, fp, meta_path)
+    return p
+
+
+def _save_cache(p: pd.DataFrame, fp: str, meta_path: Path) -> None:
+    PANEL_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = PANEL_CACHE.with_suffix(".parquet.tmp")
+    p.to_parquet(tmp, index=False)
+    tmp.replace(PANEL_CACHE)  # атомарно: читатель не увидит недописанный файл
+    meta = {
+        "table": "registry_panel", "rows": int(len(p)), "snapshots": int(p["date"].nunique()),
+        "saved_at": datetime.now(UTC).isoformat(timespec="seconds"), "fingerprint": fp,
+        "sha256": hashlib.sha256(PANEL_CACHE.read_bytes()).hexdigest(),
+        "sources": ["mpa.uz, реестр референтных цен (data/raw/mpa_api)", "cbu.uz, курсы ЦБ РУз (data/raw/cbu)"],
+    }
+    meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def build_panel() -> pd.DataFrame:
+    """Собирает панель из сырых снимков: нормализует поля и пересчитывает цены в доллары."""
     fx = fx_table()
     frames = []
     for day in snapshot_dates():
@@ -161,5 +213,3 @@ def events(p: pd.DataFrame | None = None) -> pd.DataFrame:
     ev["cut"] = 1 - ev["ratio"]
     return ev
 
-
-PROCESSED = ROOT / "data" / "processed"

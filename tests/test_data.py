@@ -1,4 +1,6 @@
 """Слой данных: проверки качества по контрактам и выборка «на дату» без подглядывания в будущее."""
+import json
+
 import pandas as pd
 import pytest
 
@@ -46,3 +48,37 @@ def test_as_of_never_returns_future_records():
     # признаки для пересмотра 5 декабря: решение этого дня ещё неизвестно
     features_view = store.as_of(df, "2025-12-05", strictly_before=True)
     assert features_view["amount"].tolist() == [100.0]
+
+
+def test_registry_panel_cache_reuses_and_invalidates(tmp_path, monkeypatch):
+    """Панель берётся с диска, пока отпечаток исходников тот же; новый снимок или код — пересборка."""
+    from pulse.data import registry
+
+    built = []
+    df = pd.DataFrame({"date": pd.to_datetime(["2026-01-01", "2026-02-01"]), "key": ["a|b|c", "d|e|f"],
+                       "local": [True, False], "base_usd": [12.5, 14.5]})
+    fingerprint = {"value": "v1"}
+
+    def fake_build():
+        built.append(1)
+        return df.copy()
+
+    monkeypatch.setattr(registry, "PANEL_CACHE", tmp_path / "registry_panel.parquet")
+    monkeypatch.setattr(registry, "build_panel", fake_build)
+    monkeypatch.setattr(registry, "_fingerprint", lambda: fingerprint["value"])
+    registry.panel.cache_clear()
+    try:
+        first = registry.panel()
+        registry.panel.cache_clear()
+        second = registry.panel()
+        assert len(built) == 1, "второй вызов должен читать кэш"
+        pd.testing.assert_frame_equal(first, second)
+        meta = json.loads((tmp_path / "registry_panel.meta.json").read_text(encoding="utf-8"))
+        assert meta["rows"] == 2 and meta["fingerprint"] == "v1" and len(meta["sha256"]) == 64
+
+        fingerprint["value"] = "v2"
+        registry.panel.cache_clear()
+        registry.panel()
+        assert len(built) == 2, "сменился отпечаток — панель пересобирается"
+    finally:
+        registry.panel.cache_clear()
