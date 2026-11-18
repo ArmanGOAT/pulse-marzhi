@@ -25,6 +25,7 @@ make setup    # окружение .venv и зависимости с точны
 make test     # тесты-инварианты
 make lint     # проверка стиля (ruff)
 make serve    # http://localhost:8000 — страница демо, /docs — схема API (OpenAPI)
+make overview # docs/project-overview.json — сводка проекта с цифрами из тех же расчётов
 ```
 
 ## Демо
@@ -120,6 +121,7 @@ artifacts/         отчёты экспериментов радара
 | [docs/RISKS.md](docs/RISKS.md) | реестр рисков системы и их статус |
 | [docs/design-system.md](docs/design-system.md) | дизайн-система страницы демо |
 | [docs/demo-script.md](docs/demo-script.md) | сценарий демо на 2 минуты и ответы на вопросы |
+| [docs/project-overview.json](docs/project-overview.json) | все ключевые цифры проекта в одном JSON, собирается кодом: `make overview` |
 | [docs/adr/](docs/adr/) | архитектурные решения |
 
 ## Как помечаются цифры
