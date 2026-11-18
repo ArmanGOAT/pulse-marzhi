@@ -439,18 +439,28 @@ def batch_pdf_bytes(res: dict) -> bytes:
         _h(pdf, w, "Не найдено в реестре")
         for r in missing:
             _p(pdf, w, f"• «{r['query']}» — {r['message']}", 9, 5)
-    risky = [c for c in sorted(res["cards"], key=lambda c: -c["p_cut"]) if c and c["level"] != "low"][:30]
+    cards = [c for c in sorted(res["cards"], key=lambda c: -c["p_cut"]) if c]
+    short = len(cards) <= 30  # короткий список — подробно по каждому, длинный — только средний и высокий риск
+    risky = cards if short else [c for c in cards if c["level"] != "low"][:30]
     if risky:
-        _h(pdf, w, "Подробно: препараты со средним и высоким риском")
+        _h(pdf, w, "Подробно по каждому препарату" if short else "Подробно: препараты со средним и высоким риском")
         for c in risky:
             if pdf.get_y() > pdf.h - 70:
                 pdf.add_page()
             pdf.set_font("DejaVu", "B", 12)
             pdf.multi_cell(w, 7, f"{c['title']} — {c['subtitle']}", **NL)
-            _p(pdf, w, f"{c['level_label']}: {c['p_cut']:.0%}. {c['todo']}")
+            _p(pdf, w, f"{c['level_label']}: {c['p_cut']:.0%}. {c['meaning']}")
+            _p(pdf, w, "Что делать:", 10)
+            for i, st in enumerate(c["steps"], 1):
+                _p(pdf, w, f"{i}. {st}", 9, 5)
+            _p(pdf, w, "Почему так:", 10)
             for r in c["reasons"]:
                 _p(pdf, w, f"• {r}", 9, 5)
-            pdf.ln(2)
+            ps, tc = c["price_story"], c["typical_cut"]
+            since = c["history"][0]["date"] if c["history"] else "—"
+            _p(pdf, w, f"Цена в реестре: {c['price']}; с {since} менялась {ps['changes']} раз. "
+                       f"Если цену снизят, обычно — на {tc['value']:.0%}. Аналогов той же дозы: {c['peers_n']}.", 9, 5)
+            pdf.ln(3)
     if res["cards"]:
         _method(pdf, w, res["cards"][0]["method"])
     return bytes(pdf.output())
