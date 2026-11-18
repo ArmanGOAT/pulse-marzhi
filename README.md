@@ -1,5 +1,10 @@
 # Пульс маржи
 
+[![CI/CD](https://github.com/ArmanGOAT/pulse-marzhi/actions/workflows/ci-cd.yml/badge.svg?branch=main)](https://github.com/ArmanGOAT/pulse-marzhi/actions/workflows/ci-cd.yml)
+
+**Демо: https://pulse.modeus.cc/** — разворачивается из этого репозитория автоматически: каждый push в `main`
+собирается и выкатывается на GitHub-раннерах (GitHub Actions), подробности в разделе [«Развёртывание»](#развёртывание).
+
 Система для импортёра рецептурного лекарства в Узбекистане (задача №16, пример: ривароксабан 20 мг).
 Она заранее оценивает вероятность пересмотра потолка цены и подбирает самый дешёвый план мер по закупкам,
 логистике и контракту, чтобы импортёр пережил пересмотр без убытка и без перебоев с препаратом.
@@ -119,9 +124,17 @@ docker compose up --build
 
 ## Развёртывание
 
-Демо работает на https://pulse.modeus.cc. Каждый push в `main` проходит GitHub Actions: линтер и тесты,
-образ из данных и отчётов радара, лежащих в git, публикация в GHCR, выкатка на сервер с проверкой здоровья
-и откатом. Схема, секреты и ручные операции: [deploy/README.md](deploy/README.md).
+Демо работает на https://pulse.modeus.cc/ и разворачивается из этого репозитория на GitHub-раннерах
+([workflow CI/CD](.github/workflows/ci-cd.yml), [запуски](https://github.com/ArmanGOAT/pulse-marzhi/actions/workflows/ci-cd.yml)).
+Каждый push в `main` проходит три шага:
+
+1. **Линтер и тесты** (ruff, pytest); они же запускаются на каждый pull request.
+2. **Образ:** собирается из данных и отчётов радара, лежащих в git, и публикуется в GHCR
+   (`ghcr.io/armangoat/pulse-marzhi`).
+3. **Выкатка на сервер** по SSH: контейнер за nginx с HTTPS (Let's Encrypt), проверка здоровья,
+   при сбое — откат на прошлый образ.
+
+Схема, кэши, секреты и ручные операции: [deploy/README.md](deploy/README.md).
 
 ## Данные и обучение
 
